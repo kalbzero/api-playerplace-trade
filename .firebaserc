@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "playerplace-chat": {
+      "hosting": {
+        "app": [
+          "playerplace-chat"
+        ]
+      }
+    }
+  }
+}
