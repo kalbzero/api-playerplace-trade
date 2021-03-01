@@ -13,8 +13,8 @@ const routes: Routes = [
   {
     path: 'home',
     loadChildren: () => import('./pages/home/home.module').then( m => m.HomePageModule),
-    canActivate: [AngularFireAuth],
-    data: {authGuardPipe: redirectUnauthorizedToLogin}
+    // canActivate: [AngularFireAuth],
+    // data: {authGuardPipe: redirectUnauthorizedToLogin}
   },
   {
     path: '',
@@ -25,8 +25,8 @@ const routes: Routes = [
   {  // https://www.youtube.com/watch?v=xNleEVG9_yA
     path: 'chat',
     loadChildren: () => import('./pages/chat/chat.module').then( m => m.ChatPageModule),
-    canActivate: [AngularFireAuth],
-    data: {authGuardPipe: redirectUnauthorizedToLogin}
+    // canActivate: [AngularFireAuth],
+    // data: {authGuardPipe: redirectUnauthorizedToLogin}
   },
 ];
 

@@ -1,9 +1,32 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>login</ion-title>
+    <ion-title>Login Page</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="ion-padding">
+  <form [formGroup]="credentialForm">
+    <ion-item>
+      <ion-input type="text" placeholder="Email Address" formControlName="email" clearInput="true" autoFocus="true"></ion-input>
+    </ion-item>
+    <div *ngIf="(credentialForm.get('email').dirty || credentialForm.get('email').touched) && credentialForm.get('email').errors" class="errors">
+      <span *ngIf="credentialForm.get('email').errors?.required">Email is required</span>
+      <span *ngIf="credentialForm.get('email').errors?.email">Email is invalid</span>
+    </div>
 
+    <ion-item>
+      <ion-input type="password" placeholder="Password" formControlName="password" clearInput="true"></ion-input>
+    </ion-item>
+    <div *ngIf="(credentialForm.get('password').dirty || credentialForm.get('password').touched) && credentialForm.get('password').errors" class="errors">
+      <span *ngIf="credentialForm.get('password').errors?.required">Password is required</span>
+      <span *ngIf="credentialForm.get('password').errors?.minlength">Password is invalid</span>
+    </div>
+  </form>
+
+  <ion-button (click)="signUp()" expand="full" shape="round">
+    SignUp
+  </ion-button>
+  <ion-button (click)="signIn()" expand="full" shape="round">
+    SignIn
+  </ion-button>
 </ion-content>
