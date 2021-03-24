@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { IonContent } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { Message } from 'src/app/interfaces/message';
-import { ChatService } from 'src/app/services/chat.service';
+import { FirebaseService } from 'src/app/services/firebase.service';
 
 @Component({
   selector: 'app-chat',
@@ -17,16 +17,16 @@ export class ChatPage implements OnInit {
   newMsg: string = '';
 
   constructor(
-    private chatService: ChatService,
+    private FirebaseService: FirebaseService,
     private router: Router
   ) { }
 
   ngOnInit() {
-    this.messages = this.chatService.getChatMessages();
+    this.messages = this.FirebaseService.getChatMessages();
   }
 
   sendMessage(){
-    this.chatService.addChatMessage(this.newMsg).then(
+    this.FirebaseService.addChatMessage(this.newMsg).then(
       () => {
         this.newMsg = '';
         this.content.scrollToBottom();
@@ -35,7 +35,7 @@ export class ChatPage implements OnInit {
   }
 
   signOut(){
-    this.chatService.signOut().then(
+    this.FirebaseService.signOut().then(
       () => {
         this.router.navigateByUrl('/', {replaceUrl: true});
       }

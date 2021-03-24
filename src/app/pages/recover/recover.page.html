@@ -1,0 +1,21 @@
+<ion-content>
+  <div class="flex-center">
+    <p class="logo">
+      <span class="color-p1">R</span>ECOVER<span class="color-p2">P</span>ASSWORD
+    </p>
+    <form [formGroup]="credentialForm">
+      <ion-item>
+        <ion-input type="text" placeholder="Email Address" formControlName="email" clearInput="true" autoFocus="true"></ion-input>
+      </ion-item>
+      <div *ngIf="(credentialForm.get('email').dirty || credentialForm.get('email').touched) && credentialForm.get('email').errors" class="errors">
+        <span *ngIf="credentialForm.get('email').errors?.required">Email is required</span>
+        <span *ngIf="credentialForm.get('email').errors?.email">Email is invalid</span>
+      </div>
+
+      <ion-button (click)="recover()" class="ion-margin-top" expand="full" shape="round">
+        Recover Password
+      </ion-button>
+    </form>
+  </div>
+</ion-content>
+

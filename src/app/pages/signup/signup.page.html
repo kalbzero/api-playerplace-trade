@@ -20,6 +20,13 @@
         <span *ngIf="credentialForm.get('password').errors?.minlength">Password must be at least 8 digits</span>
       </div>
 
+      <ion-item>
+        <ion-input type="text" placeholder="Name" formControlName="name" clearInput="true"></ion-input>
+      </ion-item>
+      <div *ngIf="(credentialForm.get('name').dirty || credentialForm.get('name').touched) && credentialForm.get('name').errors" class="errors">
+        <span *ngIf="credentialForm.get('name').errors?.required">Name is required</span>
+      </div>
+
       <ion-button (click)="signUp()" class="ion-margin-top" expand="full" shape="round">
         Signup
       </ion-button>

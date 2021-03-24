@@ -5,17 +5,15 @@ import { AlertController, LoadingController } from '@ionic/angular';
 import { FirebaseService } from 'src/app/services/firebase.service';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.page.html',
-  styleUrls: ['./login.page.scss'],
+  selector: 'app-recover',
+  templateUrl: './recover.page.html',
+  styleUrls: ['./recover.page.scss'],
 })
-export class LoginPage implements OnInit {
+export class RecoverPage implements OnInit {
 
   credentialForm: FormGroup = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl('', [Validators.required, Validators.minLength(8)]),
   });
-
   constructor(
     private router: Router,
     private alertController: AlertController,
@@ -23,23 +21,36 @@ export class LoginPage implements OnInit {
     private FirebaseService: FirebaseService
   ) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 
-  async  signIn(){
+  async recover(){
     const loading = await this.loadingController.create();
     await loading.present();
 
-    this.FirebaseService.signIn(
-      this.credentialForm.controls['email'].value,
-      this.credentialForm.controls['password'].value
-      ).then(
-      user => {
+    this.FirebaseService.recoverPassword(
+      this.credentialForm.controls['email'].value
+      ).then( 
+      async user => {
         loading.dismiss();
-        this.router.navigateByUrl('/home');
+        const alert = await this.alertController.create({
+          header: 'Recover Done! :)',
+          message: "An email has been sent to reset your password. Check your inbox or span!",
+          buttons: [
+            {
+              text: 'OK',
+              handler: () => {
+                this.router.navigateByUrl('/');
+              }
+            },
+          ]
+        });
+
+        await alert.present();
       }, async err => {
         loading.dismiss();
         const alert = await this.alertController.create({
-          header: 'SignIn Fail :(',
+          header: 'Recover Fail :(',
           message: err.message,
           buttons: ['OK']
         });
@@ -47,13 +58,5 @@ export class LoginPage implements OnInit {
         await alert.present();
       }
     );
-  }
-
-  onRegister() {
-    this.router.navigateByUrl('/signup');
-  }
-
-  onRecover() {
-    this.router.navigateByUrl('/recover');
   }
 }
