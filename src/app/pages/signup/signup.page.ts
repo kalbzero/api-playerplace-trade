@@ -38,11 +38,18 @@ export class SignupPage implements OnInit {
         const alert = await this.alertController.create({
           header: 'SignUp Done! :)',
           message: "You got it! Go to Login page!",
-          buttons: ['OK']
+          buttons: [
+            {
+              text: 'OK',
+              handler: () => {
+                // Here for to go!
+                this.router.navigateByUrl('/');
+              }
+            },
+          ]
         });
 
         await alert.present();
-        this.router.navigateByUrl('/home');
       }, async err => {
         loading.dismiss();
         const alert = await this.alertController.create({
