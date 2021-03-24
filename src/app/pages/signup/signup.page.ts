@@ -5,11 +5,11 @@ import { AlertController, LoadingController } from '@ionic/angular';
 import { ChatService } from 'src/app/services/chat.service';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.page.html',
-  styleUrls: ['./login.page.scss'],
+  selector: 'app-signup',
+  templateUrl: './signup.page.html',
+  styleUrls: ['./signup.page.scss'],
 })
-export class LoginPage implements OnInit {
+export class SignupPage implements OnInit {
 
   credentialForm: FormGroup = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -25,21 +25,28 @@ export class LoginPage implements OnInit {
 
   ngOnInit() {}
 
-  async  signIn(){
+  async  signUp(){
     const loading = await this.loadingController.create();
     await loading.present();
 
-    this.chatService.signIn(
+    this.chatService.signUp(
       this.credentialForm.controls['email'].value,
       this.credentialForm.controls['password'].value
-      ).then(
-      user => {
+      ).then( 
+      async user => {
         loading.dismiss();
+        const alert = await this.alertController.create({
+          header: 'SignUp Done! :)',
+          message: "You got it! Go to Login page!",
+          buttons: ['OK']
+        });
+
+        await alert.present();
         this.router.navigateByUrl('/home');
       }, async err => {
         loading.dismiss();
         const alert = await this.alertController.create({
-          header: 'SignIn Fail :(',
+          header: 'SignUp Fail :(',
           message: err.message,
           buttons: ['OK']
         });
@@ -47,9 +54,5 @@ export class LoginPage implements OnInit {
         await alert.present();
       }
     );
-  }
-
-  onRegister() {
-    this.router.navigateByUrl('/signup');
   }
 }

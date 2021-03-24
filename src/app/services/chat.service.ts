@@ -36,13 +36,26 @@ export class ChatService {
   }
 
   signIn(email: string, password: string){
-    return this.afAuth.signInWithEmailAndPassword(email, password);
+    this.signOut();
+    return this.afAuth.signInWithEmailAndPassword(email, password).then(
+      (userCredential) => {
+        this.currentUser = {
+          uid: userCredential.user.uid,
+          email: userCredential.user.email
+        };
+        console.log(this.currentUser);
+      }
+    );
   }
 
   signOut(){
     return this.afAuth.signOut();
   }
 
+  recoverPassword(email: string){
+    return this.afAuth.sendPasswordResetEmail(email);
+  }
+  
   addChatMessage(msg){
     return this.afs.collection('messages').add({
       msg: msg,
@@ -68,10 +81,10 @@ export class ChatService {
     return this.getUsers().pipe(
       switchMap(res => {
         users = res;
-        return this.afs.collection<Message>('messages', ref => ref.orderBy('createdAt')).valueChanges({ idField: 'uid'}); // as Observable<Message[]>
+        return this.afs.collection<Message>('messages', ref => ref.orderBy('createdAt')).valueChanges({ idField: 'id'}); // as Observable<Message[]>
       }),
       map(messages => {
-        for(let m of messages){
+        for(let m of messages){ 
           m.fromName = this.getUsersForMsg(m.from, users);
           m.myMsg = this.currentUser.uid === m.from;
         }

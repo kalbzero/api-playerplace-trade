@@ -1,7 +1,7 @@
-<ion-content class="ion-padding">
+<ion-content>
   <div class="flex-center">
     <p class="logo">
-      <span class="color-p1">P</span>LAYER<span class="color-p2">P</span>LACE
+      <span class="color-p1">S</span>ING<span class="color-p2">U</span>P
     </p>
     <form [formGroup]="credentialForm">
       <ion-item>
@@ -17,16 +17,12 @@
       </ion-item>
       <div *ngIf="(credentialForm.get('password').dirty || credentialForm.get('password').touched) && credentialForm.get('password').errors" class="errors">
         <span *ngIf="credentialForm.get('password').errors?.required">Password is required</span>
-        <span *ngIf="credentialForm.get('password').errors?.minlength">Password is invalid</span>
+        <span *ngIf="credentialForm.get('password').errors?.minlength">Password must be at least 8 digits</span>
       </div>
-  
-      <ion-button (click)="signIn()" class="ion-margin-top" expand="full" shape="round">
-        SignIn
+
+      <ion-button (click)="signUp()" class="ion-margin-top" expand="full" shape="round">
+        Signup
       </ion-button>
     </form>
-
-    <div class="login__register ion-margin-top">
-      <p (click)="onRegister()">Don't have a account yet? Click here!</p>
-    </div>
   </div>
 </ion-content>

@@ -28,6 +28,10 @@ const routes: Routes = [
     // canActivate: [AngularFireAuth],
     // data: {authGuardPipe: redirectUnauthorizedToLogin}
   },
+  {
+    path: 'signup',
+    loadChildren: () => import('./pages/signup/signup.module').then( m => m.SignupPageModule)
+  },
 ];
 
 @NgModule({
