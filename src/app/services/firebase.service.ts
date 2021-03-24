@@ -7,11 +7,12 @@ import * as firebase from 'firebase/app';
 
 import { User } from '../interfaces/user';
 import { Message } from '../interfaces/message';
+// https://firebase.google.com/docs/auth/web/manage-users?hl=pt-br
 
 @Injectable({
   providedIn: 'root'
 })
-export class ChatService {
+export class FirebaseService {
 
   currentUser: User = null;
 
@@ -27,12 +28,21 @@ export class ChatService {
     );
   }
 
-  async signUp(email: string, password: string){
+  async signUp(email: string, password: string, displayName: string = ''){
     const credential = await this.afAuth.createUserWithEmailAndPassword(email, password);
 
     console.log(credential);
-
-    return this.afs.doc(`users/${credential.user.uid}`).set({ uid: credential.user.uid, email: credential.user.email});
+    var user = this.afAuth.currentUser;
+    (await user).updateProfile({
+      displayName: displayName,
+    }).then(
+      (response)=>{
+        return this.afs.doc(`users/${credential.user.uid}`).set({ uid: credential.user.uid, email: credential.user.email, displayName: credential.user.displayName});
+      }
+    ).catch(
+      (error)=>{console.log(error)}
+    );
+    
   }
 
   signIn(email: string, password: string){
@@ -41,7 +51,8 @@ export class ChatService {
       (userCredential) => {
         this.currentUser = {
           uid: userCredential.user.uid,
-          email: userCredential.user.email
+          email: userCredential.user.email,
+          displayName: userCredential.user.displayName
         };
         console.log(this.currentUser);
       }
@@ -76,7 +87,7 @@ export class ChatService {
     }
   }
 
-  getChatMessages() {
+  getChatMessages() { //mudar para pegar só a sala 1-1
     let users: User[];
     return this.getUsers().pipe(
       switchMap(res => {
