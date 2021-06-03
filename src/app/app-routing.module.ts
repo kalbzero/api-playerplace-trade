@@ -35,7 +35,27 @@ const routes: Routes = [
   {
     path: 'recover',
     loadChildren: () => import('./pages/recover/recover.module').then( m => m.RecoverPageModule)
+  },  {
+    path: 'menu',
+    loadChildren: () => import('./pages/menu/menu.module').then( m => m.MenuPageModule)
   },
+  {
+    path: 'perfil',
+    loadChildren: () => import('./pages/perfil/perfil.module').then( m => m.PerfilPageModule)
+  },
+  {
+    path: 'trade',
+    loadChildren: () => import('./pages/trade/trade.module').then( m => m.TradePageModule)
+  },
+  {
+    path: 'lists',
+    loadChildren: () => import('./pages/lists/lists.module').then( m => m.ListsPageModule)
+  },
+  {
+    path: 'search',
+    loadChildren: () => import('./pages/search/search.module').then( m => m.SearchPageModule)
+  },
+
 ];
 
 @NgModule({
