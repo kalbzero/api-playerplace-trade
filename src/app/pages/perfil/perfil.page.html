@@ -1,9 +1,41 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>perfil</ion-title>
+<ion-header >
+  <ion-toolbar color="dark">
+    <ion-buttons slot="start">
+      <ion-menu-button autoHide="false"></ion-menu-button>
+    </ion-buttons>
+    <ion-title >
+      Perfil
+    </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-
+<ion-content class="container-background-color">
+  <ion-grid>
+    <ion-row class="ion-text-center">
+      <ion-col size="12" class="ion-margin-top">
+        <img class="avatar-img" src="../../../assets/gideon.png" alt="Avatar">
+      </ion-col>
+      <ion-col size="12">
+        <strong>Name: </strong>Gideon
+      </ion-col>
+      <ion-col size="12">
+        <strong>Email: </strong>gideon.planeswalker@magic.com
+      </ion-col>
+      <ion-col size="12">
+        <ion-button class="bg-green">Chat</ion-button>
+      </ion-col>
+      <ion-col size="12" class="ion-margin-top">
+        <span>Exchange History</span>
+        <canvas baseChart 
+          [data]="pieChartData" 
+          [colors]="pieChartColors"
+          [labels]="pieChartLabels" 
+          [chartType]="pieChartType"
+          [options]="pieChartOptions"
+          [plugins]="pieChartPlugins"
+          [legend]="pieChartLegend">
+        </canvas>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>

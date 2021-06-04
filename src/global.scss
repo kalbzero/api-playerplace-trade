@@ -38,3 +38,45 @@
 .color-p2 {
     color: #1d469e;
 }
+.container-background-color {
+    --background: #F5F5F5;
+}
+.avatar-img {
+    border-radius: 50%;
+    height: 200px;
+}
+// MTG Colors
+.red-color {
+    color: #e2192c;
+}
+.bg-red {
+    background-color: #e2192c;
+}
+.blue-color {
+    color: #1d469e;
+}
+.bg-blue {
+    background-color: #1d469e;
+}
+.green-color {
+    color: #00733d;
+}
+.bg-green {
+    // background-color: #00733d;
+    --background: #00733d;
+}
+.white-color {
+    color: #f9faf4;    
+}
+.bg-white {
+    background-color: #f9faf4;
+}
+.dark-color {
+    color: #150b00;
+}
+.bg-dark {
+    background-color: #150b00;
+}
+.artifact-color {
+    color: #d5e0e2;
+}
