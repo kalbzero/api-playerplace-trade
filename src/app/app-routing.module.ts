@@ -45,8 +45,8 @@ const routes: Routes = [
     loadChildren: () => import('./pages/trade/trade.module').then( m => m.TradePageModule)
   },
   {
-    path: 'lists',
-    loadChildren: () => import('./pages/lists/lists.module').then( m => m.ListsPageModule)
+    path: 'havelist',
+    loadChildren: () => import('./pages/havelist/havelist.module').then( m => m.HaveListPageModule)
   },
   {
     path: 'search',
@@ -56,6 +56,11 @@ const routes: Routes = [
     path: 'tutorial',
     loadChildren: () => import('./pages/tutorial/tutorial.module').then( m => m.TutorialPageModule)
   },
+  {
+    path: 'wantlist',
+    loadChildren: () => import('./pages/wantlist/wantlist.module').then( m => m.WantlistPageModule)
+  },
+
 
 
 ];

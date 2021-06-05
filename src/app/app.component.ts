@@ -13,11 +13,10 @@ export class AppComponent {
     {title: 'Home', url: '/home'},
     {title: 'Perfil', url: '/perfil'},
     {title: 'Search', url: '/search'},
-    // {title: 'Havelist', url: '/home'},
-    // {title: 'Wantlist', url: '/home'},
-    {title: 'Lists', url: '/lists'},
-    {title: 'Trades', url: '/trade'},
-    {title: 'Tutorials', url: '/tutorial'},
+    {title: 'Havelist', url: '/havelist'},
+    {title: 'Wantlist', url: '/wantlist'},
+    {title: 'My Trades', url: '/trade'},
+    // {title: 'Tutorials', url: '/tutorial'},
   ];
 
   selectedpath: string = '';
