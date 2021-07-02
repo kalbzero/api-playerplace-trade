@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { AlertController } from '@ionic/angular';
+import { Router } from '@angular/router';
+import { AlertController, LoadingController } from '@ionic/angular';
+import { User } from 'src/app/interfaces/user';
+import { CardService } from 'src/app/services/card.service';
+import { FirebaseService } from 'src/app/services/firebase.service';
 
 @Component({
   selector: 'app-havelist',
@@ -8,6 +12,7 @@ import { AlertController } from '@ionic/angular';
 })
 export class HaveListPage implements OnInit {
 
+  user: User;
   cards: any[] = [];
   cardsBK: any[] = [
     {
@@ -48,13 +53,43 @@ export class HaveListPage implements OnInit {
   ];
 
   constructor(
-    private alertController: AlertController
+    private alertController: AlertController,
+    private cardService: CardService,
+    private firebaseService: FirebaseService,
+    private loadingController: LoadingController,
+    private router: Router,
   ) { 
-
+    if(this.firebaseService.currentUser == null){
+      this.user = {displayName:'', email: '', uid: '', photo: '../../../assets/gideon.png'}
+    } else {
+      this.user = this.firebaseService.currentUser;
+    }
   }
 
   ngOnInit() {
-    this.getMyHaveList();
+    if(this.user.uid != ''){
+      this.getMyHaveList();
+    } else {
+      this.doLogin();
+    }
+    
+  }
+
+  async doLogin(){
+    const alert = await this.alertController.create({
+      header: 'You are not logged in!',
+      message: "Comeback to login page!",
+      buttons: [
+        {
+          text: 'OK',
+          handler: () => {
+            this.router.navigateByUrl('/');
+          }
+        },
+      ]
+    });
+
+    await alert.present();
   }
 
   async onModalDelete(id: number) {
@@ -92,7 +127,21 @@ export class HaveListPage implements OnInit {
     this.cards = this.cardsBK;
   }
 
-  async onSearchCards($event){
+  async onSearchCardsToAdd($event){
+    const searchTerm = $event.target.value;
+    const loading = await this.loadingController.create();
+    await loading.present();
+
+    this.cardService.searchCard(searchTerm).subscribe(
+      (response)=>{
+        console.log(response);
+        loading.dismiss();
+      }
+    );
+
+  }
+
+  async onSearchCardsIntheList($event){
     const searchTerm = $event.target.value;
     this.cards = this.cardsBK;
 

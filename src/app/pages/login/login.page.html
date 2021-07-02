@@ -5,7 +5,7 @@
     </p>
     <form [formGroup]="credentialForm">
       <ion-item>
-        <ion-input type="text" placeholder="Email Address" formControlName="email" clearInput="true" autoFocus="true"></ion-input>
+        <ion-input type="text" placeholder="Email Address" formControlName="email" autoFocus="true"></ion-input>
       </ion-item>
       <div *ngIf="(credentialForm.get('email').dirty || credentialForm.get('email').touched) && credentialForm.get('email').errors" class="errors">
         <span *ngIf="credentialForm.get('email').errors?.required">Email is required</span>
@@ -13,7 +13,7 @@
       </div>
   
       <ion-item>
-        <ion-input type="password" placeholder="Password" formControlName="password" clearInput="true"></ion-input>
+        <ion-input type="password" placeholder="Password" formControlName="password"></ion-input>
       </ion-item>
       <div *ngIf="(credentialForm.get('password').dirty || credentialForm.get('password').touched) && credentialForm.get('password').errors" class="errors">
         <span *ngIf="credentialForm.get('password').errors?.required">Password is required</span>

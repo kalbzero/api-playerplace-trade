@@ -18,11 +18,11 @@ export class FirebaseService {
 
   constructor(
     private afAuth: AngularFireAuth,
-    private afs: AngularFirestore
+    private afs: AngularFirestore,
   ) { 
     this.afAuth.onAuthStateChanged(
       (user) => { 
-        console.log(user);
+        // console.log(user);
         this.currentUser = user;
       }
     );
@@ -54,7 +54,7 @@ export class FirebaseService {
           email: userCredential.user.email,
           displayName: userCredential.user.displayName
         };
-        console.log(this.currentUser);
+        // console.log(this.currentUser);
       }
     );
   }

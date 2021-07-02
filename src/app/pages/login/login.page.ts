@@ -20,7 +20,7 @@ export class LoginPage implements OnInit {
     private router: Router,
     private alertController: AlertController,
     private loadingController: LoadingController,
-    private FirebaseService: FirebaseService
+    private firebaseService: FirebaseService
   ) { }
 
   ngOnInit() {}
@@ -29,7 +29,7 @@ export class LoginPage implements OnInit {
     const loading = await this.loadingController.create();
     await loading.present();
 
-    this.FirebaseService.signIn(
+    this.firebaseService.signIn(
       this.credentialForm.controls['email'].value,
       this.credentialForm.controls['password'].value
       ).then(

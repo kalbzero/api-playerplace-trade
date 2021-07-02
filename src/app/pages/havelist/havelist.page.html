@@ -10,7 +10,8 @@
 </ion-header>
 
 <ion-content class="container-background-color">
-  <ion-searchbar  placeholder="Search to card name" animated (ionInput)="onSearchCards($event)"></ion-searchbar>
+  <ion-searchbar  placeholder="Search a card to add"  (ionInput)="onSearchCardsToAdd($event)"></ion-searchbar>
+  <ion-searchbar  placeholder="Search in the list above" animated (ionInput)="onSearchCardsIntheList($event)"></ion-searchbar>
   <ion-list>
     <ion-item>
       <ion-label class="text-bold">Card Name</ion-label>

@@ -13,13 +13,13 @@
   <ion-grid>
     <ion-row class="ion-text-center">
       <ion-col size="12" class="ion-margin-top">
-        <img class="avatar-img" src="../../../assets/gideon.png" alt="Avatar">
+        <img class="avatar-img" [src]="user.photo" alt="Avatar">
       </ion-col>
       <ion-col size="12">
-        <strong>Name: </strong>Gideon
+        <strong>Name: </strong>{{user.displayName}}
       </ion-col>
       <ion-col size="12">
-        <strong>Email: </strong>gideon.planeswalker@magic.com
+        <strong>Email: </strong>{{user.email}}
       </ion-col>
       <ion-col size="12">
         <ion-button class="bg-green">Chat</ion-button>

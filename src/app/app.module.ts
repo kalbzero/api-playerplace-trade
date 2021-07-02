@@ -5,6 +5,7 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 
 import { ChartsModule } from 'ng2-charts';
@@ -24,6 +25,7 @@ import { environment } from '../environments/environment';
     AngularFireAuthModule,
     AngularFirestoreModule,
     FormsModule,
+    HttpClientModule,
     ReactiveFormsModule,
     ChartsModule
   ],

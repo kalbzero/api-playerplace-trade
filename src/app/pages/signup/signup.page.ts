@@ -39,7 +39,7 @@ export class SignupPage implements OnInit {
         loading.dismiss();
         const alert = await this.alertController.create({
           header: 'SignUp Done! :)',
-          message: "You got it! Go to Login page!",
+          message: "You got it! Go to Login page or check your email!",
           buttons: [
             {
               text: 'OK',
