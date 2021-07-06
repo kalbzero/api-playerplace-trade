@@ -35,6 +35,11 @@ export class PerfilPage implements OnInit {
       this.user = {displayName:'', email: '', uid: '', photo: '../../../assets/gideon.png'}
     } else {
       this.user = this.firebaseService.currentUser;
+      if(this.user.sex == '1'){
+        this.user.photo = '../../../assets/liliana.png'
+      } else {
+        this.user.photo = '../../../assets/gideon.png'
+      }
     }
   }
 

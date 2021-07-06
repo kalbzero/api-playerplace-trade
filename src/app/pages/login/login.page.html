@@ -20,7 +20,7 @@
         <span *ngIf="credentialForm.get('password').errors?.minlength">Password is invalid</span>
       </div>
   
-      <ion-button (click)="signIn()" class="ion-margin-top" expand="full" shape="round">
+      <ion-button (click)="signIn()" [disabled]="credentialForm.valid == false ? true : false" class="ion-margin-top" expand="full" shape="round">
         SignIn
       </ion-button>
     </form>

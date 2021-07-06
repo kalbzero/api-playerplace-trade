@@ -12,7 +12,7 @@
     </p>
     <form [formGroup]="credentialForm">
       <ion-item>
-        <ion-input type="text" placeholder="Email Address" formControlName="email" clearInput="true" autoFocus="true"></ion-input>
+        <ion-input type="text" placeholder="Email Address" formControlName="email" autoFocus="true"></ion-input>
       </ion-item>
       <div *ngIf="(credentialForm.get('email').dirty || credentialForm.get('email').touched) && credentialForm.get('email').errors" class="errors">
         <span *ngIf="credentialForm.get('email').errors?.required">Email is required</span>
@@ -20,7 +20,7 @@
       </div>
   
       <ion-item>
-        <ion-input type="password" placeholder="Password" formControlName="password" clearInput="true"></ion-input>
+        <ion-input type="password" placeholder="Password" formControlName="password"></ion-input>
       </ion-item>
       <div *ngIf="(credentialForm.get('password').dirty || credentialForm.get('password').touched) && credentialForm.get('password').errors" class="errors">
         <span *ngIf="credentialForm.get('password').errors?.required">Password is required</span>
@@ -28,13 +28,80 @@
       </div>
 
       <ion-item>
-        <ion-input type="text" placeholder="Name" formControlName="name" clearInput="true"></ion-input>
+        <ion-input type="text" placeholder="Name" formControlName="name"></ion-input>
       </ion-item>
       <div *ngIf="(credentialForm.get('name').dirty || credentialForm.get('name').touched) && credentialForm.get('name').errors" class="errors">
         <span *ngIf="credentialForm.get('name').errors?.required">Name is required</span>
       </div>
 
-      <ion-button (click)="signUp()" class="ion-margin-top" expand="full" shape="round">
+      <ion-item>
+        <ion-label>Genere: </ion-label>
+        <ion-select formControlName="sex"  interface="action-sheet">
+          <ion-select-option value="1">Female</ion-select-option>
+          <ion-select-option value="2">Male</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <div *ngIf="(credentialForm.get('sex').dirty || credentialForm.get('sex').touched) && credentialForm.get('sex').errors" class="errors">
+        <span *ngIf="credentialForm.get('sex').errors?.required">Genere is required</span>
+      </div>
+      <!-- Address -->
+      <ion-item >
+        <ion-input type="text" placeholder="CEP" formControlName="cep" (ionChange)="getCEP()"></ion-input>
+      </ion-item>
+      <div *ngIf="(credentialForm.get('cep').dirty || credentialForm.get('cep').touched) && credentialForm.get('cep').errors" class="errors">
+        <span *ngIf="credentialForm.get('cep').errors?.required">CEP is required</span>
+      </div>
+
+      <ion-item  *ngIf="showAddress">
+        <ion-input type="text" placeholder="Street" formControlName="street"></ion-input>
+      </ion-item>
+      <div *ngIf="(credentialForm.get('street').dirty || credentialForm.get('street').touched) && credentialForm.get('street').errors" class="errors">
+        <span *ngIf="credentialForm.get('street').errors?.required">Street is required</span>
+      </div>
+
+      <ion-item  *ngIf="showAddress">
+        <ion-input type="tel" placeholder="Number" formControlName="number"></ion-input>
+      </ion-item>
+      <div *ngIf="(credentialForm.get('number').dirty || credentialForm.get('number').touched) && credentialForm.get('number').errors" class="errors">
+        <span *ngIf="credentialForm.get('number').errors?.required">Number is required</span>
+      </div>
+
+      <ion-item  *ngIf="showAddress">
+        <ion-input type="text" placeholder="Complement" formControlName="complement"></ion-input>
+      </ion-item>
+      <div *ngIf="(credentialForm.get('complement').dirty || credentialForm.get('complement').touched) && credentialForm.get('complement').errors" class="errors">
+        <span *ngIf="credentialForm.get('complement').errors?.required">Complement is required</span>
+      </div>
+
+      <ion-item  *ngIf="showAddress">
+        <ion-input type="text" placeholder="Neighboardhood" formControlName="neighboardhood"></ion-input>
+      </ion-item>
+      <div *ngIf="(credentialForm.get('neighboardhood').dirty || credentialForm.get('neighboardhood').touched) && credentialForm.get('neighboardhood').errors" class="errors">
+        <span *ngIf="credentialForm.get('neighboardhood').errors?.required">Neighboardhood is required</span>
+      </div>
+
+      <ion-item  *ngIf="showAddress">
+        <ion-input type="text" placeholder="City" formControlName="city"></ion-input>
+      </ion-item>
+      <div *ngIf="(credentialForm.get('city').dirty || credentialForm.get('city').touched) && credentialForm.get('city').errors" class="errors">
+        <span *ngIf="credentialForm.get('city').errors?.required">City is required</span>
+      </div>
+
+      <ion-item  *ngIf="showAddress">
+        <ion-input type="text" placeholder="State" formControlName="state"></ion-input>
+      </ion-item>
+      <div *ngIf="(credentialForm.get('state').dirty || credentialForm.get('state').touched) && credentialForm.get('state').errors" class="errors">
+        <span *ngIf="credentialForm.get('state').errors?.required">State is required</span>
+      </div>
+
+      <ion-item  *ngIf="showAddress">
+        <ion-input type="text" placeholder="Country" formControlName="country"></ion-input>
+      </ion-item>
+      <div *ngIf="(credentialForm.get('country').dirty || credentialForm.get('country').touched) && credentialForm.get('country').errors" class="errors">
+        <span *ngIf="credentialForm.get('country').errors?.required">Country is required</span>
+      </div>
+
+      <ion-button (click)="signUp()" [disabled]="credentialForm.valid == false ? true : false" class="ion-margin-top" expand="full" shape="round">
         Signup
       </ion-button>
     </form>

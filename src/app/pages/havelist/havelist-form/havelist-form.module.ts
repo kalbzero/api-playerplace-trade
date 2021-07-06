@@ -4,9 +4,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { HaveListPageRoutingModule } from './havelist-routing.module';
+import { HavelistFormPageRoutingModule } from './havelist-form-routing.module';
 
-import { HaveListPage } from './havelist.page';
+import { HavelistFormPage } from './havelist-form.page';
 
 @NgModule({
   imports: [
@@ -14,8 +14,8 @@ import { HaveListPage } from './havelist.page';
     FormsModule,
     IonicModule,
     ReactiveFormsModule,
-    HaveListPageRoutingModule
+    HavelistFormPageRoutingModule
   ],
-  declarations: [HaveListPage]
+  declarations: [HavelistFormPage]
 })
-export class HaveListPageModule {}
+export class HavelistFormPageModule {}

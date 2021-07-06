@@ -7,7 +7,11 @@ const routes: Routes = [
   {
     path: '',
     component: HaveListPage
+  },  {
+    path: 'havelist-form',
+    loadChildren: () => import('./havelist-form/havelist-form.module').then( m => m.HavelistFormPageModule)
   }
+
 ];
 
 @NgModule({

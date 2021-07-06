@@ -28,7 +28,10 @@ export class FirebaseService {
     );
   }
 
-  async signUp(email: string, password: string, displayName: string = ''){
+  async signUp(email: string, password: string, displayName: string, sex: string,
+    street: string, number: string, complement: string, neighboardhood: string, city: string, state: string, country: string, 
+    cep: string, latitude: string, longitude: string){
+
     const credential = await this.afAuth.createUserWithEmailAndPassword(email, password);
 
     console.log(credential);
@@ -37,7 +40,22 @@ export class FirebaseService {
       displayName: displayName,
     }).then(
       (response)=>{
-        return this.afs.doc(`users/${credential.user.uid}`).set({ uid: credential.user.uid, email: credential.user.email, displayName: credential.user.displayName});
+        return this.afs.doc(`users/${credential.user.uid}`).set({ 
+          uid: credential.user.uid, 
+          email: credential.user.email, 
+          displayName: credential.user.displayName,
+          street,
+          number,
+          sex,
+          complement,
+          cep,
+          neighboardhood,
+          city,
+          state,
+          country,
+          latitude,
+          longitude
+        });
       }
     ).catch(
       (error)=>{console.log(error)}
@@ -67,6 +85,7 @@ export class FirebaseService {
     return this.afAuth.sendPasswordResetEmail(email);
   }
   
+  // Chat
   addChatMessage(msg){
     return this.afs.collection('messages').add({
       msg: msg,
@@ -92,7 +111,7 @@ export class FirebaseService {
     return this.getUsers().pipe(
       switchMap(res => {
         users = res;
-        return this.afs.collection<Message>('messages', ref => ref.orderBy('createdAt')).valueChanges({ idField: 'id'}); // as Observable<Message[]>
+        return this.afs.collection<Message>('messages', ref => ref.orderBy('createdAt')).valueChanges({ idField: 'id'});
       }),
       map(messages => {
         for(let m of messages){ 
@@ -102,5 +121,18 @@ export class FirebaseService {
         return messages;
       })
     );
+  }
+
+  // Havelist & Wantlist
+  addCardInList(card: any){
+    return this.afs.collection('user-cards').add(card);
+  }
+
+  getHavelist(){
+    return this.afs.collection('user-cards')
+  }
+
+  getWantlist(){
+    return this.afs.collection('user-cards', (ref) => ref.where('id_user','==',''))
   }
 }

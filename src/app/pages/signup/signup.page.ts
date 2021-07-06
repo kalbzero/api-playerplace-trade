@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AlertController, LoadingController } from '@ionic/angular';
-import { FirebaseService } from 'src/app/services/firebase.service';
+import { FirebaseService } from 'src/app/services/firebase.service'; //AddressService
+import { AddressService } from 'src/app/services/address.service';
 
 @Component({
   selector: 'app-signup',
@@ -15,13 +16,27 @@ export class SignupPage implements OnInit {
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required, Validators.minLength(8)]),
     name: new FormControl('', [Validators.required]),
+    sex: new FormControl('', [Validators.required]),
+    street: new FormControl({value: '', disabled: true}, [Validators.required]),
+    number: new FormControl({value: '', disabled: false}, [Validators.required]),
+    complement: new FormControl({value: '', disabled: false}),
+    cep: new FormControl({value: '', disabled: false}, [Validators.required]),
+    neighboardhood: new FormControl({value: '', disabled: true}, [Validators.required]),
+    city:new FormControl({value: '', disabled: true}, [Validators.required]),
+    state: new FormControl({value: '', disabled: true}, [Validators.required]),
+    country: new FormControl({value: '', disabled: true}, [Validators.required]),
+    latitude: new FormControl({value: '', disabled: true}, [Validators.required]),
+    longitude: new FormControl({value: '', disabled: true}, [Validators.required]),
   });
+
+  public showAddress: boolean = false;
 
   constructor(
     private router: Router,
     private alertController: AlertController,
     private loadingController: LoadingController,
-    private FirebaseService: FirebaseService
+    private FirebaseService: FirebaseService,
+    private addressService: AddressService
   ) { }
 
   ngOnInit() {}
@@ -33,7 +48,18 @@ export class SignupPage implements OnInit {
     this.FirebaseService.signUp(
       this.credentialForm.controls['email'].value,
       this.credentialForm.controls['password'].value,
-      this.credentialForm.controls['name'].value
+      this.credentialForm.controls['name'].value,
+      this.credentialForm.controls['sex'].value,
+      this.credentialForm.controls['street'].value,
+      this.credentialForm.controls['number'].value,
+      this.credentialForm.controls['complement'].value,
+      this.credentialForm.controls['cep'].value,
+      this.credentialForm.controls['neighboardhood'].value,
+      this.credentialForm.controls['city'].value,
+      this.credentialForm.controls['state'].value,
+      this.credentialForm.controls['country'].value,
+      this.credentialForm.controls['latitude'].value,
+      this.credentialForm.controls['longitude'].value,
       ).then( 
       async user => {
         loading.dismiss();
@@ -62,5 +88,35 @@ export class SignupPage implements OnInit {
         await alert.present();
       }
     );
+  }
+
+  getCEP(){
+    let cep = this.credentialForm.get('cep').value;
+
+    if(cep.length == 8){
+      this.addressService.getAddress(cep).subscribe(
+        (response)=>{
+          this.credentialForm.patchValue({
+            street: response.logradouro,
+            cep: response.cep,
+            neighboardhood: response.bairro,
+            city: response.localidade,
+            state: response.uf,
+            country: 'Brasil',
+          });
+        }
+      );
+      
+      if(navigator.geolocation){
+        navigator.geolocation.getCurrentPosition( pos => {
+          this.credentialForm.patchValue({
+            latitude: ""+pos.coords.latitude,
+            longitude: ""+pos.coords.longitude
+          });
+        });
+      }
+      
+      this.showAddress = true;
+    }
   }
 }

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AlertController, LoadingController } from '@ionic/angular';
 import { User } from 'src/app/interfaces/user';
 import { CardService } from 'src/app/services/card.service';
@@ -70,7 +71,7 @@ export class HaveListPage implements OnInit {
     if(this.user.uid != ''){
       this.getMyHaveList();
     } else {
-      this.doLogin();
+      // this.doLogin();
     }
     
   }
@@ -127,18 +128,8 @@ export class HaveListPage implements OnInit {
     this.cards = this.cardsBK;
   }
 
-  async onSearchCardsToAdd($event){
-    const searchTerm = $event.target.value;
-    const loading = await this.loadingController.create();
-    await loading.present();
-
-    this.cardService.searchCard(searchTerm).subscribe(
-      (response)=>{
-        console.log(response);
-        loading.dismiss();
-      }
-    );
-
+  onAddForm() {
+    this.router.navigateByUrl('havelist/havelist-form');
   }
 
   async onSearchCardsIntheList($event){

@@ -1,6 +1,17 @@
 export interface User {
     uid: string,
     displayName?: string,
+    sex?: string,
     email: string,
-    photo?: string
+    photo?: string,
+    street?: string,
+    number?: string,
+    complement?: string,
+    cep?: string,
+    neighboardhood?: string,
+    city?: string,
+    state?: string,
+    country?: string,
+    latitude?: string,
+    longitude?: string,
 }
