@@ -92,7 +92,6 @@ export class HaveListPage implements OnInit {
 
     this.firebaseService.getHavelist(this.user.uid).subscribe(
         (response: any)=>{
-          console.log(response);
           response.forEach( card => {
             this.cards.push({
               name: card.name,

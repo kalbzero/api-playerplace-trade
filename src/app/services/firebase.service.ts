@@ -181,7 +181,7 @@ export class FirebaseService {
       map( cards => {
         if(cards.length > 0){
           // Se nao tiver cartas na cidade, busca no estado
-          const collection = this.afs.collection('havelist', (ref) => ref.where('city','==',city));
+          const collection = this.afs.collection('havelist', (ref) => ref.where('state','==',state));
           const cards$ = collection.valueChanges().pipe(
             map( cards => {
               return cards;
@@ -193,6 +193,27 @@ export class FirebaseService {
     )
     return cards$;
   }
-  // Trades
 
+  // Trades
+  getMyTradesBuyer(uid){
+    const collectionBuyer = this.afs.collection('trades', (ref) => ref.where('id_buyer','==',uid));
+    const trades$ = collectionBuyer.valueChanges().pipe(
+      map( tradesBuyer => {
+        return tradesBuyer;
+      })
+    )
+
+    return trades$;
+  }
+
+  getMyTradesSeller(uid: string){
+    const collectionBuyer = this.afs.collection('trades', (ref) => ref.where('id_seller','==',uid));
+    const trades$ = collectionBuyer.valueChanges().pipe(
+      map( tradesSeller => {
+        return tradesSeller;
+      })
+    )
+
+    return trades$;
+  }
 }

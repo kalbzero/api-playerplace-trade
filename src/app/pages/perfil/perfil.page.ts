@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { ChartType, ChartOptions } from 'chart.js';
 import { SingleDataSet, Label, monkeyPatchChartJsLegend, monkeyPatchChartJsTooltip } from 'ng2-charts';
+import { Trade } from 'src/app/interfaces/trade';
 import { User } from 'src/app/interfaces/user';
 import { FirebaseService } from 'src/app/services/firebase.service';
 
@@ -16,6 +17,7 @@ export class PerfilPage implements OnInit {
   public user: User = {displayName:'', email: '', uid: '', photo: '../../../assets/gideon.png'};
   public loggedUser: User = {displayName:'', email: '', uid: '', photo: '../../../assets/gideon.png'};
   public anotherUser: User = {displayName:'', email: '', uid: '', photo: '../../../assets/gideon.png'};
+  private myTrade: any[] = [];
   public showChatButton: boolean = true;
   public chatRoomName: string = "";
 
@@ -85,12 +87,21 @@ export class PerfilPage implements OnInit {
        next: (user)=>{
          if(type === 1){
           this.loggedUser = user;
-          console.log(this.loggedUser);
          } else {
           this.anotherUser = user;
-          console.log(this.user);
          }
          this.user = user;
+         this.firebaseService.getMyTradesBuyer(this.user.uid).subscribe({
+           next: (trades: any) => { 
+             trades.forEach( trade => { 
+               this.myTrade.push({
+                id: trade.uid,
+                status:trade.id_trade_status
+               })
+              })
+              console.log(this.myTrade);
+            }
+         });
        }
      });
   }
