@@ -14,14 +14,14 @@
   <ion-searchbar  placeholder="Search in the list above" animated (ionInput)="onSearchCardsIntheList($event)"></ion-searchbar>
   <ion-list>
     <ion-item>
-      <ion-label class="text-bold">Card Name</ion-label>
-      <ion-label class="text-bold">Status</ion-label>
-      <ion-label class="text-bold">Action</ion-label>
+      <ion-label style="max-width: 50% !important;" class="text-bold">Card Name</ion-label>
+      <ion-label style="max-width: 20% !important;" class="text-bold">Status</ion-label>
+      <ion-label style="max-width: 30% !important;" class="text-bold">Action</ion-label>
     </ion-item>
     <ion-item class="container-background-color" *ngFor="let card of cards">
-      <ion-label>{{card.name}}</ion-label>
-      <ion-label>{{card.status}}</ion-label>
-      <ion-label><ion-button (click)="onModalDelete(card.id_card)" color="danger">Delete</ion-button></ion-label>
+      <ion-label style="max-width: 50% !important;">{{card.name}}</ion-label>
+      <ion-label style="max-width: 20% !important;">{{card.status}}</ion-label>
+      <ion-label style="max-width: 30% !important;"><ion-button (click)="onModalDelete(card.id_card)" color="danger">Delete</ion-button></ion-label>
     </ion-item>
   </ion-list>
 </ion-content>

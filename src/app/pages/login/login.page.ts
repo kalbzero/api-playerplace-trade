@@ -35,6 +35,7 @@ export class LoginPage implements OnInit {
       ).then(
       user => {
         loading.dismiss();
+        this.credentialForm.reset();
         this.router.navigateByUrl('/home');
       }, async err => {
         loading.dismiss();

@@ -6,11 +6,11 @@ import { CardService } from 'src/app/services/card.service';
 import { FirebaseService } from 'src/app/services/firebase.service';
 
 @Component({
-  selector: 'app-havelist-form',
-  templateUrl: './havelist-form.page.html',
-  styleUrls: ['./havelist-form.page.scss'],
+  selector: 'app-wantlist-form',
+  templateUrl: './wantlist-form.page.html',
+  styleUrls: ['./wantlist-form.page.scss'],
 })
-export class HavelistFormPage implements OnInit {
+export class WantlistFormPage implements OnInit {
 
   searchForm: FormGroup = new FormGroup({
     searchCard: new FormControl('', [Validators.required, ])
@@ -26,6 +26,7 @@ export class HavelistFormPage implements OnInit {
   card: any = {};
   isList: boolean = false;
   showFormAdd: boolean = false;
+  enableButton: boolean = false;
 
   constructor(
     private alertController: AlertController,
@@ -80,21 +81,16 @@ export class HavelistFormPage implements OnInit {
     const loading = await this.loadingController.create();
     await loading.present();
 
-    const obj = {
+    let obj = {
       id_card: this.cardForm.get('id_card').value,
-      name: (this.cardForm.get('name').value).toLowerCase(),
+      name: this.cardForm.get('name').value,
       setName: this.cardForm.get('setName').value,
       id_quality: this.cardForm.get('quality').value,
       id_language: this.cardForm.get('language').value,
       type_list: '1',
-      id_user: this.firebaseService.currentUser.uid,
-      city: '',
-      state: '',
-      longitude: '',
-      latitude: '',
-      hash: '',
+      id_user: this.firebaseService.currentUser.uid
     }
-    const response = this.firebaseService.addCardInHavelist(obj);
+    let response = this.firebaseService.addCardInWantlist(obj);
     console.log(response);
     loading.dismiss();
 

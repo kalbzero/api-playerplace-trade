@@ -1,0 +1,75 @@
+<ion-header >
+  <ion-toolbar color="dark">
+    <ion-buttons slot="start">
+      <ion-menu-button autoHide="false"></ion-menu-button>
+    </ion-buttons>
+    <ion-title >
+      Wantlist - Add Card
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="searchForm">
+    <ion-item>
+      <ion-label position="stacked">Card Name</ion-label>
+      <ion-input type="text" placeholder="Ex: Akroma" formControlName="searchCard"></ion-input>
+      <ion-button type="click" (click)="onSearchCardsToAdd()">Search!</ion-button>
+    </ion-item>
+  </form>
+
+  <ion-list *ngIf="isList">
+    <ion-item>
+      <ion-label style="max-width: 44% !important;" class="text-bold">Card Name</ion-label>
+      <ion-label style="max-width: 44% !important;" class="text-bold">Collection</ion-label>
+      <ion-label style="max-width: 12% !important;" class="text-bold">Add</ion-label>
+    </ion-item>
+    <ion-item class="container-background-color" *ngFor="let card of cards">
+      <ion-label style="max-width: 44% !important;">{{card.name}}</ion-label>
+      <ion-label style="max-width: 44% !important;">{{card.setName}}</ion-label>
+      <ion-label style="max-width: 12% !important;"><ion-button (click)="onGetCardInfos(card)" color="success"><ion-icon name="add-outline"></ion-icon></ion-button></ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ion-list *ngIf="showFormAdd">
+    <form [formGroup]="cardForm">
+      <ion-item>
+        <ion-label>Card Name: </ion-label>
+        <ion-input formControlName="name"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>Collection: </ion-label>
+        <ion-input formControlName="setName"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>Quality: </ion-label>
+        <ion-select formControlName="quality"  interface="action-sheet">
+          <ion-select-option value="1">Mint (M)</ion-select-option>
+          <ion-select-option value="2">Near Mint (MN)</ion-select-option>
+          <ion-select-option value="3">Lightly Played (LP)</ion-select-option>
+          <ion-select-option value="4">Moderately Played (MP)</ion-select-option>
+          <ion-select-option value="5">Heavily Played (HP)</ion-select-option>
+          <ion-select-option value="6">Damaged (D)</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-label>Language: </ion-label>
+        <ion-select formControlName="language"  interface="action-sheet">
+          <ion-select-option value="1">English (ENG)</ion-select-option>
+          <ion-select-option value="2">Portuguese (POR)</ion-select-option>
+          <ion-select-option value="3">Spanish (SPA)</ion-select-option>
+          <ion-select-option value="4">French (FRE)</ion-select-option>
+          <ion-select-option value="5">Italian (ITA)</ion-select-option>
+          <ion-select-option value="6">Japan (JAP)</ion-select-option>
+          <ion-select-option value="7">Chinese (CHI)</ion-select-option>
+          <ion-select-option value="8">Russian (RUS)</ion-select-option>
+          <ion-select-option value="9">Korean (KOR)</ion-select-option>
+          <ion-select-option value="10">Other</ion-select-option>
+        </ion-select>
+      </ion-item>
+        <ion-button (click)="addCard()" [disabled]="cardForm.valid == false ? true : false" class="ion-margin-top" expand="full" shape="round">
+        Add Card
+      </ion-button>
+    </form>
+  </ion-list>
+</ion-content>

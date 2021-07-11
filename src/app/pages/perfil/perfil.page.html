@@ -15,13 +15,16 @@
       <ion-col size="12" class="ion-margin-top">
         <img class="avatar-img" [src]="user.photo" alt="Avatar">
       </ion-col>
-      <ion-col size="12">
+      <ion-col size="12" class="ion-margin-top">
         <strong>Name: </strong>{{user.displayName}}
       </ion-col>
       <ion-col size="12">
         <strong>Email: </strong>{{user.email}}
       </ion-col>
       <ion-col size="12">
+        <strong>Localidade: </strong>{{user.city}}/{{user.state}}
+      </ion-col>
+      <ion-col size="12" *ngIf="showChatButton">
         <ion-button class="bg-green">Chat</ion-button>
       </ion-col>
       <ion-col size="12" class="ion-margin-top">

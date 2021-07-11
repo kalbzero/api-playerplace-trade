@@ -1,16 +1,12 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { PerfilPage } from './perfil.page';
+import { WantlistFormPage } from './wantlist-form.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: PerfilPage
-  },
-  {
-    path: '/:id',
-    component: PerfilPage
+    component: WantlistFormPage
   }
 ];
 
@@ -18,4 +14,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class PerfilPageRoutingModule {}
+export class WantlistFormPageRoutingModule {}

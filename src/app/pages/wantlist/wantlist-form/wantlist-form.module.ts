@@ -4,18 +4,18 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { WantlistPageRoutingModule } from './wantlist-routing.module';
+import { WantlistFormPageRoutingModule } from './wantlist-form-routing.module';
 
-import { WantlistPage } from './wantlist.page';
+import { WantlistFormPage } from './wantlist-form.page';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
-    ReactiveFormsModule,
     IonicModule,
-    WantlistPageRoutingModule
+    ReactiveFormsModule,
+    WantlistFormPageRoutingModule
   ],
-  declarations: [WantlistPage]
+  declarations: [WantlistFormPage]
 })
-export class WantlistPageModule {}
+export class WantlistFormPageModule {}

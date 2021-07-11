@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AlertController } from '@ionic/angular';
 import { ChartType, ChartOptions } from 'chart.js';
 import { SingleDataSet, Label, monkeyPatchChartJsLegend, monkeyPatchChartJsTooltip } from 'ng2-charts';
 import { User } from 'src/app/interfaces/user';
 import { FirebaseService } from 'src/app/services/firebase.service';
+
 @Component({
   selector: 'app-perfil',
   templateUrl: './perfil.page.html',
@@ -10,7 +13,12 @@ import { FirebaseService } from 'src/app/services/firebase.service';
 })
 export class PerfilPage implements OnInit {
 
-  public user: User;
+  public user: User = {displayName:'', email: '', uid: '', photo: '../../../assets/gideon.png'};
+  public loggedUser: User = {displayName:'', email: '', uid: '', photo: '../../../assets/gideon.png'};
+  public anotherUser: User = {displayName:'', email: '', uid: '', photo: '../../../assets/gideon.png'};
+  public showChatButton: boolean = true;
+  public chatRoomName: string = "";
+
   public pieChartOptions: ChartOptions = {
     responsive: true,
   };
@@ -25,26 +33,65 @@ export class PerfilPage implements OnInit {
   }]
 
   constructor(
-    private firebaseService: FirebaseService
+    private firebaseService: FirebaseService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private alertController: AlertController,
   ) { 
     monkeyPatchChartJsTooltip();
     monkeyPatchChartJsLegend();
-
     
+  }
+
+  ngOnInit() {
+    this.setCurrentPerfil();
+  }
+
+  async doLogin(){
+    const alert = await this.alertController.create({
+      header: 'You are not logged in!',
+      message: "Comeback to login page!",
+      buttons: [
+        {
+          text: 'OK',
+          handler: () => {
+            this.router.navigateByUrl('/');
+          }
+        },
+      ]
+    });
+
+    await alert.present();
+  }
+  
+  setCurrentPerfil(){
     if(this.firebaseService.currentUser == null){
-      this.user = {displayName:'', email: '', uid: '', photo: '../../../assets/gideon.png'}
+      this.doLogin();
     } else {
-      this.user = this.firebaseService.currentUser;
-      if(this.user.sex == '1'){
-        this.user.photo = '../../../assets/liliana.png'
+
+      // Verificar se é o perfil do usuario logado ou do perfil do outro usuário
+      if(this.route.snapshot.params.id == undefined){
+        this.getUserInfos(this.firebaseService.currentUser.uid, 1);
+        this.showChatButton = false;
       } else {
-        this.user.photo = '../../../assets/gideon.png'
+        this.getUserInfos(this.route.snapshot.params.id, 2);
+        this.showChatButton = true;
       }
     }
   }
 
-  ngOnInit() {
-    console.log(this.user);
+  getUserInfos(uid: string, type: number){
+     return this.firebaseService.getUserByUid(uid).subscribe({
+       next: (user)=>{
+         if(type === 1){
+          this.loggedUser = user;
+          console.log(this.loggedUser);
+         } else {
+          this.anotherUser = user;
+          console.log(this.user);
+         }
+         this.user = user;
+       }
+     });
   }
-
 }

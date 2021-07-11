@@ -28,13 +28,13 @@ export class FirebaseService {
     );
   }
 
-  async signUp(email: string, password: string, displayName: string, sex: string,
+  // Login, Logout, Cadastro e Recuepração de Senha
+  async signUp(email: string, password: string, displayName: string, sex: string, photo: string,
     street: string, number: string, complement: string, neighboardhood: string, city: string, state: string, country: string, 
-    cep: string, latitude: string, longitude: string){
+    cep: string, latitude: string, longitude: string, hash: string){
 
     const credential = await this.afAuth.createUserWithEmailAndPassword(email, password);
 
-    console.log(credential);
     var user = this.afAuth.currentUser;
     (await user).updateProfile({
       displayName: displayName,
@@ -44,9 +44,10 @@ export class FirebaseService {
           uid: credential.user.uid, 
           email: credential.user.email, 
           displayName: credential.user.displayName,
+          sex,
+          photo,
           street,
           number,
-          sex,
           complement,
           cep,
           neighboardhood,
@@ -54,7 +55,8 @@ export class FirebaseService {
           state,
           country,
           latitude,
-          longitude
+          longitude,
+          hash
         });
       }
     ).catch(
@@ -67,12 +69,9 @@ export class FirebaseService {
     this.signOut();
     return this.afAuth.signInWithEmailAndPassword(email, password).then(
       (userCredential) => {
-        this.currentUser = {
-          uid: userCredential.user.uid,
-          email: userCredential.user.email,
-          displayName: userCredential.user.displayName
-        };
-        // console.log(this.currentUser);
+        this.getUserByUid(userCredential.user.uid).subscribe({
+          next: (user)=>{this.currentUser = user}
+        });
       }
     );
   }
@@ -96,6 +95,17 @@ export class FirebaseService {
 
   getUsers() {
     return this.afs.collection('users').valueChanges({ idField: 'uid'}) as Observable<User[]>
+  }
+
+  getUserByUid(uid: string){
+    const collection = this.afs.collection('users', (ref) => ref.where('uid','==',uid));
+    const user$ = collection.valueChanges().pipe(
+      map( (user: {}) => {
+        let aux: User = user[0];
+        return aux;
+      })
+    )
+    return user$;
   }
 
   getUsersForMsg(msgFromId, users: User[]): string {
@@ -124,15 +134,65 @@ export class FirebaseService {
   }
 
   // Havelist & Wantlist
-  addCardInList(card: any){
-    return this.afs.collection('user-cards').add(card);
+  async addCardInHavelist(card: any){
+    const { id } = await this.afs.collection('havelist').add(card);
+    return this.afs.collection('havelist').doc(id).update({uid: id});
   }
 
-  getHavelist(){
-    return this.afs.collection('user-cards')
+  async addCardInWantlist(card: any){
+    const { id } = await this.afs.collection('wantlist').add(card);
+    return this.afs.collection('wantlist').doc(id).update({uid: id});;
   }
 
-  getWantlist(){
-    return this.afs.collection('user-cards', (ref) => ref.where('id_user','==',''))
+  getHavelist(uid: string){
+    const collection = this.afs.collection('havelist', (ref) => ref.where('id_user','==',uid));
+    const cards$ = collection.valueChanges().pipe(
+      map( cards => {
+        return cards;
+      })
+    )
+    return cards$;
   }
+
+  getWantlist(uid: string){
+    const collection = this.afs.collection('wantlist', (ref) => ref.where('id_user','==',uid));
+    const cards$ = collection.valueChanges().pipe(
+      map( cards => {
+        return cards;
+      })
+    )
+    return cards$;
+  }
+
+  async deleteCardInHaveList(uid: string){
+    // return this.afs.collection('havelist').doc(uid).delete();
+    return await this.afs.doc(`havelist/${uid}`).delete();
+  }
+
+  async deleteCardInWantList(uid: string){
+    // return this.afs.collection('wantlist').doc(uid).delete();
+    return await this.afs.doc(`wantlist/${uid}`).delete();
+  }
+
+  // https://firebase.google.com/docs/firestore/solutions/geoqueries
+  getSearchCards(city: string, state: string){
+    const collection = this.afs.collection('havelist', (ref) => ref.where('city','==',city));
+    const cards$ = collection.valueChanges().pipe(
+      map( cards => {
+        if(cards.length > 0){
+          // Se nao tiver cartas na cidade, busca no estado
+          const collection = this.afs.collection('havelist', (ref) => ref.where('city','==',city));
+          const cards$ = collection.valueChanges().pipe(
+            map( cards => {
+              return cards;
+            })
+          );
+          return cards$;
+        }
+      })
+    )
+    return cards$;
+  }
+  // Trades
+
 }

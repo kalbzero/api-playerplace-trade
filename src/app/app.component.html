@@ -13,6 +13,9 @@
             {{p.title}}
           </ion-item>
         </ion-menu-toggle>
+        <ion-menu-toggle auto-hide="false" >
+          <ion-item (click)="signOut()">Sign Out</ion-item>
+        </ion-menu-toggle>
       </ion-list>
     </ion-content>
   </ion-menu>

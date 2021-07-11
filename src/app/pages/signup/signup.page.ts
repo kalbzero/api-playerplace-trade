@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { AlertController, LoadingController } from '@ionic/angular';
 import { FirebaseService } from 'src/app/services/firebase.service'; //AddressService
 import { AddressService } from 'src/app/services/address.service';
+// const geofire = require('geofire-common');
+import * as GeoFire from "geofire-common";
 
 @Component({
   selector: 'app-signup',
@@ -17,6 +19,7 @@ export class SignupPage implements OnInit {
     password: new FormControl('', [Validators.required, Validators.minLength(8)]),
     name: new FormControl('', [Validators.required]),
     sex: new FormControl('', [Validators.required]),
+    photo: new FormControl({value: ''}),
     street: new FormControl({value: '', disabled: true}, [Validators.required]),
     number: new FormControl({value: '', disabled: false}, [Validators.required]),
     complement: new FormControl({value: '', disabled: false}),
@@ -27,6 +30,7 @@ export class SignupPage implements OnInit {
     country: new FormControl({value: '', disabled: true}, [Validators.required]),
     latitude: new FormControl({value: '', disabled: true}, [Validators.required]),
     longitude: new FormControl({value: '', disabled: true}, [Validators.required]),
+    hash: new FormControl({value: ''}),
   });
 
   public showAddress: boolean = false;
@@ -36,7 +40,7 @@ export class SignupPage implements OnInit {
     private alertController: AlertController,
     private loadingController: LoadingController,
     private FirebaseService: FirebaseService,
-    private addressService: AddressService
+    private addressService: AddressService,
   ) { }
 
   ngOnInit() {}
@@ -45,11 +49,18 @@ export class SignupPage implements OnInit {
     const loading = await this.loadingController.create();
     await loading.present();
 
+    if(this.credentialForm.controls['photo'].value === "1"){
+      this.credentialForm.patchValue({photo: "../../../assets/gideon.png"});
+    } else {
+      this.credentialForm.patchValue({photo: "../../../assets/liliana.png"});
+    }
+
     this.FirebaseService.signUp(
       this.credentialForm.controls['email'].value,
       this.credentialForm.controls['password'].value,
       this.credentialForm.controls['name'].value,
       this.credentialForm.controls['sex'].value,
+      this.credentialForm.controls['photo'].value,
       this.credentialForm.controls['street'].value,
       this.credentialForm.controls['number'].value,
       this.credentialForm.controls['complement'].value,
@@ -60,6 +71,7 @@ export class SignupPage implements OnInit {
       this.credentialForm.controls['country'].value,
       this.credentialForm.controls['latitude'].value,
       this.credentialForm.controls['longitude'].value,
+      this.credentialForm.controls['hash'].value,
       ).then( 
       async user => {
         loading.dismiss();
@@ -111,7 +123,8 @@ export class SignupPage implements OnInit {
         navigator.geolocation.getCurrentPosition( pos => {
           this.credentialForm.patchValue({
             latitude: ""+pos.coords.latitude,
-            longitude: ""+pos.coords.longitude
+            longitude: ""+pos.coords.longitude,
+            hash: GeoFire.geohashForLocation([pos.coords.latitude, pos.coords.longitude])
           });
         });
       }
