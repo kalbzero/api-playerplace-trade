@@ -21,11 +21,14 @@ export class PerfilPage implements OnInit {
   public showChatButton: boolean = true;
   public chatRoomName: string = "";
 
+  public countComp = 0; 
+  public countProg = 0; 
+  public countCanc = 0;
   public pieChartOptions: ChartOptions = {
     responsive: true,
   };
-  public pieChartLabels: Label[] = [['Completed:' +1], ['In Progress: '+0], 'Canceled: '+0];
-  public pieChartData: SingleDataSet = [1, 0, 0];
+  public pieChartLabels: Label[] = [['Completed:' +0], ['In Progress: '+0], 'Canceled: '+0];
+  public pieChartData: SingleDataSet = [0, 0, 0];
   public pieChartType: ChartType = 'pie';
   public pieChartLegend = true;
   public pieChartPlugins = [];
@@ -91,18 +94,50 @@ export class PerfilPage implements OnInit {
           this.anotherUser = user;
          }
          this.user = user;
+         this.countCanc = 0; this.countComp = 0; this.countProg = 0;
          this.firebaseService.getMyTradesBuyer(this.user.uid).subscribe({
            next: (trades: any) => { 
              trades.forEach( trade => { 
-               this.myTrade.push({
-                id: trade.uid,
-                status:trade.id_trade_status
-               })
+                this.myTrade.push({
+                  id: trade.uid,
+                  status:trade.id_trade_status
+                })
+                if(trade.id_trade_status == 1){
+                  this.countProg++;
+                } else if(trade.id_trade_status == 2){
+                  this.countComp++;
+                } else if(trade.id_trade_status == 3) {
+                  this.countCanc++;
+                }
               })
-              console.log(this.myTrade);
             }
-         });
+          });
+          this.firebaseService.getMyTradesSeller(this.user.uid).subscribe({
+            next: (trades: any) => {
+              trades.forEach( trade => { 
+                this.myTrade.push({
+                  id: trade.uid,
+                  status:trade.id_trade_status
+                })
+                if(trade.id_trade_status == 1){
+                  this.countProg++;
+                } else if(trade.id_trade_status == 2){
+                  this.countComp++;
+                } else if(trade.id_trade_status == 3) {
+                  this.countCanc++;
+                }
+              })
+              this.updateGraphs();
+            }
+          });
        }
      });
+  }
+
+  private updateGraphs(){
+    this.pieChartData = [this.countComp, this.countProg, this.countCanc];
+    this.pieChartLabels = [['Completed:' +this.countComp], ['In Progress: '+this.countProg], 'Canceled: '+this.countCanc];
+    monkeyPatchChartJsTooltip();
+    monkeyPatchChartJsLegend();
   }
 }

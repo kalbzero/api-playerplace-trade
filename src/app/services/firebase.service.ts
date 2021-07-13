@@ -202,7 +202,6 @@ export class FirebaseService {
         return tradesBuyer;
       })
     )
-
     return trades$;
   }
 
@@ -213,7 +212,6 @@ export class FirebaseService {
         return tradesSeller;
       })
     )
-
     return trades$;
   }
 }
