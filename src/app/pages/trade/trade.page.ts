@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { FirebaseService } from 'src/app/services/firebase.service';
+import { TradePageRoutingModule } from './trade-routing.module';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-trade',
@@ -8,45 +11,9 @@ import { Component, OnInit } from '@angular/core';
 export class TradePage implements OnInit {
 
   myTrades: any[] = [];
-  myTradesBK: any[] = [
-    {
-      cardName: 'Gideon',
-      status: 'Completed',
-      otherUser: 'Fulano',
-    },
-    {
-      cardName: 'Liliana',
-      status: 'Completed',
-      otherUser: 'Ciclano',
-    },
-    {
-      cardName: 'Jace',
-      status: 'In Progress',
-      otherUser: 'Beltrano',
-    },
-    {
-      cardName: 'Karn',
-      status: 'Completed',
-      otherUser: 'Outroano',
-    },
-    {
-      cardName: 'Nicol Bolas',
-      status: 'Canceled',
-      otherUser: 'Doutorano',
-    },
-    {
-      cardName: 'Ajani',
-      status: 'Completed',
-      otherUser: 'Mestrano',
-    },
-    {
-      cardName: 'Nissa',
-      status: 'Completed',
-      otherUser: 'Rataiano',
-    },
-  ];
+  myTradesBK: any[] = [];
 
-  constructor() { 
+  constructor(private firebaseService: FirebaseService, private router: Router,) { 
     
   }
 
@@ -71,7 +38,52 @@ export class TradePage implements OnInit {
   }
 
   private getMyTradesList() {
-    // My id_user
-    this.myTrades = this.myTradesBK;
+    this.firebaseService.getMyTradesBuyer(this.firebaseService.currentUser.uid).subscribe({
+      next: (trades: any) => { 
+        trades.forEach( trade => {
+          console.log("buyer");
+          const otherUser = trade.id_seller_name === this.firebaseService.currentUser.displayName ? trade.id_buyer_name : trade.id_seller_name;
+           this.myTrades.push({
+             id: trade.uid,
+             cardName: trade.card_name,
+             otherUser,
+             status:trade.id_trade_status
+           })
+         })
+       }
+     });
+    this.firebaseService.getMyTradesSeller(this.firebaseService.currentUser.uid).subscribe({
+      next: (trades: any)=>{
+        trades.forEach( trade => {
+          console.log("seller");
+          const otherUser = trade.id_seller_name === this.firebaseService.currentUser.displayName ? trade.id_buyer_name : trade.id_seller_name;
+          this.myTrades.push({
+            uid: trade.uid,
+            cardName: trade.card_name,
+            otherUser,
+            status: this.getStatusTrade(trade.id_trade_status),
+          })
+        })
+      }
+    });
+    this.myTradesBK = this.myTrades;
+    console.log(this.myTrades);
+  }
+
+  private getStatusTrade(status: string){
+    if(status == '1'){
+      return 'Complete';
+    } else if(status == '2'){
+      return 'Progress';
+    } else if(status == '3'){
+      return 'Canceled';
+    } else {
+      return '';
+    }
+  }
+
+  openTrade(uid: string){
+    console.log(uid);
+    // this.router.navigateByUrl('trade/trade-form/');
   }
 }

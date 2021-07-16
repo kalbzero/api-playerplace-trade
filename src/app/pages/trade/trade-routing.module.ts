@@ -7,7 +7,11 @@ const routes: Routes = [
   {
     path: '',
     component: TradePage
+  },  {
+    path: 'trade-form',
+    loadChildren: () => import('./trade-form/trade-form.module').then( m => m.TradeFormPageModule)
   }
+
 ];
 
 @NgModule({

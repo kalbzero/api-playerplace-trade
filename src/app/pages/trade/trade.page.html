@@ -14,14 +14,14 @@
   
   <ion-list>
     <ion-item>
-      <ion-label class="text-bold">Card Name</ion-label>
-      <ion-label class="text-bold">Other User</ion-label>
-      <ion-label class="text-bold">Status</ion-label>
+      <ion-label style="max-width: 50% !important;" class="text-bold">Card Name</ion-label>
+      <ion-label style="max-width: 30% !important;" class="text-bold">Other User</ion-label>
+      <ion-label style="max-width: 20% !important;" class="text-bold">Status</ion-label>
     </ion-item>
     <ion-item *ngFor="let trade of myTrades">
-      <ion-label>{{trade.cardName}}</ion-label>
-      <ion-label>{{trade.otherUser}}</ion-label>
-      <ion-label>{{trade.status}}</ion-label>
+      <ion-label style="max-width: 50% !important; color:cornflowerblue" (click)="openTrade(trade.uid)">{{trade.cardName}}</ion-label>
+      <ion-label style="max-width: 30% !important;">{{trade.otherUser}}</ion-label>
+      <ion-label style="max-width: 20% !important;">{{trade.status}}</ion-label>
     </ion-item>
   </ion-list>
 </ion-content>
