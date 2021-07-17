@@ -83,7 +83,6 @@ export class TradePage implements OnInit {
   }
 
   openTrade(uid: string){
-    console.log(uid);
-    // this.router.navigateByUrl('trade/trade-form/');
+    this.router.navigateByUrl('trade/trade-form/'+uid);
   }
 }

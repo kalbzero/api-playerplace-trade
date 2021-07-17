@@ -10,65 +10,74 @@
 </ion-header>
 
 <ion-content>
+  <ion-button expand="block" color="primary" (click)="editTrade()">Edit Status and Infos</ion-button>
   <ion-list>
     <ion-item>
       <ion-label>Card Name: </ion-label>
-      <ion-input></ion-input>
+      <ion-label>{{trade.card_name}}</ion-label>
     </ion-item>
 
     <ion-item>
       <ion-label>Collection: </ion-label>
-      <ion-input></ion-input>
+      <ion-label>{{trade.collection}}</ion-label>
     </ion-item>
     
     <ion-item>
       <ion-label>Quality: </ion-label>
-      <ion-input></ion-input>
+      <ion-label>{{trade.quality}}</ion-label>
     </ion-item>
 
     <ion-item>
       <ion-label>Buyer Name: </ion-label>
-      <ion-input></ion-input>
+      <ion-label>{{trade.buyer_name}}</ion-label>
     </ion-item>
 
     <ion-item>
       <ion-label>Seller Name: </ion-label>
-      <ion-input></ion-input>
+      <ion-label>{{trade.seller_name}}</ion-label>
     </ion-item>
 
     <ion-item>
-      <ion-label>Type's Trade: </ion-label>
-      <ion-input></ion-input>
+      <ion-label>Type Trade: </ion-label>
+      <ion-label>{{trade.trades_type}}</ion-label>
     </ion-item>
 
-    <ion-item *ngIf="">
-      <ion-label>Security Postal Code Buyer </ion-label>
-      <ion-input></ion-input>
+    <ion-item *ngIf="trade.id_trades_type == 1">
+      <ion-label>Postal Code Buyer </ion-label>
+      <ion-label>{{trade.security_postal_code_buyer}}</ion-label>
     </ion-item>
 
-    <ion-item *ngIf="">
-      <ion-label>Security Postal Code Seller </ion-label>
-      <ion-input></ion-input>
+    <ion-item *ngIf="trade.id_trades_type == 1">
+      <ion-label>Postal Code Seller </ion-label>
+      <ion-label>{{trade.security_postal_code_seller}}</ion-label>
+    </ion-item>
+
+    <ion-item *ngIf="trade.id_trades_type == 2">
+      <ion-label>Location </ion-label>
+      <ion-label>{{trade.location}}</ion-label>
     </ion-item>
 
     <ion-item>
       <ion-label>Buyer Status </ion-label>
-      <ion-input></ion-input>
+      <ion-label>{{trade.buyer_status}}</ion-label>
     </ion-item>
 
     <ion-item>
       <ion-label>Seller Status </ion-label>
-      <ion-input></ion-input>
+      <ion-label>{{trade.seller_status}}</ion-label>
     </ion-item>
 
     <ion-item>
       <ion-label>Trade Status </ion-label>
-      <ion-input></ion-input>
+      <ion-label>{{trade.status}}</ion-label>
     </ion-item>
 
-    <ion-item >
-      <ion-label>Observations </ion-label>
-      <ion-input></ion-input>
+    <ion-item>
+      <ion-text>Observations: </ion-text>
+    </ion-item>
+
+    <ion-item>
+      <ion-text>{{trade.obs}}</ion-text>
     </ion-item>
   </ion-list>
 </ion-content>
