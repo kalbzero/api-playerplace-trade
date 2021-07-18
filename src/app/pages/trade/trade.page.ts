@@ -41,7 +41,6 @@ export class TradePage implements OnInit {
     this.firebaseService.getMyTradesBuyer(this.firebaseService.currentUser.uid).subscribe({
       next: (trades: any) => { 
         trades.forEach( trade => {
-          console.log("buyer");
           const otherUser = trade.id_seller_name === this.firebaseService.currentUser.displayName ? trade.id_buyer_name : trade.id_seller_name;
            this.myTrades.push({
              id: trade.uid,
@@ -55,7 +54,6 @@ export class TradePage implements OnInit {
     this.firebaseService.getMyTradesSeller(this.firebaseService.currentUser.uid).subscribe({
       next: (trades: any)=>{
         trades.forEach( trade => {
-          console.log("seller");
           const otherUser = trade.id_seller_name === this.firebaseService.currentUser.displayName ? trade.id_buyer_name : trade.id_seller_name;
           this.myTrades.push({
             uid: trade.uid,
@@ -67,7 +65,6 @@ export class TradePage implements OnInit {
       }
     });
     this.myTradesBK = this.myTrades;
-    console.log(this.myTrades);
   }
 
   private getStatusTrade(status: string){
