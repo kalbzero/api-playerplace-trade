@@ -41,42 +41,33 @@ export class TradePage implements OnInit {
     this.firebaseService.getMyTradesBuyer(this.firebaseService.currentUser.uid).subscribe({
       next: (trades: any) => { 
         trades.forEach( trade => {
-          const otherUser = trade.id_seller_name === this.firebaseService.currentUser.displayName ? trade.id_buyer_name : trade.id_seller_name;
+          const otherUser = trade.seller_name === this.firebaseService.currentUser.displayName ? trade.buyer_name : trade.seller_name;
+          console.log(otherUser, trade.buyer_name , trade.seller_name, trade);
            this.myTrades.push({
              id: trade.uid,
              cardName: trade.card_name,
-             otherUser,
+             otherUser: otherUser,
              status:trade.id_trade_status
            })
          })
+         
        }
      });
     this.firebaseService.getMyTradesSeller(this.firebaseService.currentUser.uid).subscribe({
       next: (trades: any)=>{
         trades.forEach( trade => {
-          const otherUser = trade.id_seller_name === this.firebaseService.currentUser.displayName ? trade.id_buyer_name : trade.id_seller_name;
+          const otherUser = trade.seller_name === this.firebaseService.currentUser.displayName ? trade.buyer_name : trade.seller_name;
           this.myTrades.push({
             uid: trade.uid,
             cardName: trade.card_name,
             otherUser,
-            status: this.getStatusTrade(trade.id_trade_status),
+            status: trade.status,
           })
         })
       }
     });
     this.myTradesBK = this.myTrades;
-  }
-
-  private getStatusTrade(status: string){
-    if(status == '1'){
-      return 'Complete';
-    } else if(status == '2'){
-      return 'Progress';
-    } else if(status == '3'){
-      return 'Canceled';
-    } else {
-      return '';
-    }
+    console.log(this.myTradesBK);
   }
 
   openTrade(uid: string){

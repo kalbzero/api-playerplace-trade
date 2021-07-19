@@ -3,7 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { ChartType, ChartOptions } from 'chart.js';
 import { SingleDataSet, Label, monkeyPatchChartJsLegend, monkeyPatchChartJsTooltip } from 'ng2-charts';
-import { Trade } from 'src/app/interfaces/trade';
 import { User } from 'src/app/interfaces/user';
 import { FirebaseService } from 'src/app/services/firebase.service';
 
@@ -94,7 +93,6 @@ export class PerfilPage implements OnInit {
           this.anotherUser = user;
          }
          this.user = user;
-         this.countCanc = 0; this.countComp = 0; this.countProg = 0;
          this.firebaseService.getMyTradesBuyer(this.user.uid).subscribe({
            next: (trades: any) => { 
              trades.forEach( trade => { 
@@ -139,5 +137,23 @@ export class PerfilPage implements OnInit {
     this.pieChartLabels = [['Completed:' +this.countComp], ['In Progress: '+this.countProg], 'Canceled: '+this.countCanc];
     monkeyPatchChartJsTooltip();
     monkeyPatchChartJsLegend();
+  }
+
+  openChat(){
+    this.firebaseService.getUserByUid(this.firebaseService.currentUser.uid).subscribe({
+      next: (user)=>{
+        this.loggedUser = user;
+        //criar nome da sala
+        console.log(this.loggedUser.uid, ">", this.anotherUser.uid, this.loggedUser.uid > this.anotherUser.uid);
+        if(this.loggedUser.uid > this.anotherUser.uid){
+          console.log("logged is bigger");
+          this.chatRoomName = this.loggedUser.uid + this.anotherUser.uid;
+        } else {
+          console.log("another is bigger");
+          this.chatRoomName = this.anotherUser.uid + this.loggedUser.uid;
+        }
+        // route to chat room 
+      }
+    });
   }
 }

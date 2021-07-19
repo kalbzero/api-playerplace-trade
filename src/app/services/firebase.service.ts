@@ -7,6 +7,7 @@ import * as firebase from 'firebase/app';
 
 import { User } from '../interfaces/user';
 import { Message } from '../interfaces/message';
+import { Trade } from '../interfaces/trade';
 // https://firebase.google.com/docs/auth/web/manage-users?hl=pt-br
 
 @Injectable({
@@ -21,8 +22,7 @@ export class FirebaseService {
     private afs: AngularFirestore,
   ) { 
     this.afAuth.onAuthStateChanged(
-      (user) => { 
-        // console.log(user);
+      (user) => {
         this.currentUser = user;
       }
     );
@@ -141,7 +141,7 @@ export class FirebaseService {
 
   async addCardInWantlist(card: any){
     const { id } = await this.afs.collection('wantlist').add(card);
-    return this.afs.collection('wantlist').doc(id).update({uid: id});;
+    return this.afs.collection('wantlist').doc(id).update({uid: id});
   }
 
   getHavelist(uid: string){
@@ -213,5 +213,33 @@ export class FirebaseService {
       })
     )
     return trades$;
+  }
+
+  getInfosTrade(uid: string){
+    const collection = this.afs.collection('trades', (ref) => ref.where('uid','==',uid));
+    const trade$ = collection.valueChanges().pipe(
+      map( (trade: {}) => {
+        let aux: Trade = trade[0];
+        return aux;
+      })
+    )
+    return trade$;
+  }
+
+  addTrade(){
+
+  }
+
+  updateTrade(trade: Trade){
+    return this.afs.collection('trades').doc(trade.uid).update({
+      status: trade.status, 
+      obs: trade.obs, 
+      security_postal_code_buyer: trade.security_postal_code_buyer, 
+      security_postal_code_seller: trade.security_postal_code_seller,
+      buyer_status: trade.buyer_status,
+      seller_status: trade.seller_status,
+      buyer_id_status: trade.buyer_id_status,
+      seller_id_status: trade.seller_id_status,
+    });
   }
 }
