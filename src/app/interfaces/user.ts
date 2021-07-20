@@ -14,4 +14,5 @@ export interface User {
     country?: string,
     latitude?: string,
     longitude?: string,
+    hash?: string,
 }

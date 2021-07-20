@@ -29,7 +29,6 @@ export class HaveListPage implements OnInit {
   }
 
   ngOnInit() {
-    console.log("init!!!");
     if(this.user.uid != ''){
       this.getMyHaveList();
     } else {
@@ -79,9 +78,8 @@ export class HaveListPage implements OnInit {
   }
 
   private onDelete(uid:string) {
-    this.firebaseService.deleteCardInHaveList(uid).then(
-      (resp)=>{this.getMyHaveList(); console.log(resp)}
-    );
+    this.firebaseService.deleteCardInHaveList(uid);
+    this.getMyHaveList();
   }
 
   private async getMyHaveList() {
@@ -95,38 +93,15 @@ export class HaveListPage implements OnInit {
           response.forEach( card => {
             this.cards.push({
               name: card.name,
-              status: this.getStatusCard(card.id_quality),
-              id_card: card.id_card,
-              uid: card.uid
-            })
-            this.cardsBK.push({
-              name: card.name,
-              status: this.getStatusCard(card.id_quality),
+              status: card.quality,
               id_card: card.id_card,
               uid: card.uid
             })
           });
+          this.cardsBK = this.cards
           loading.dismiss();
         }
       )
-  }
-
-  private getStatusCard(status: string){
-    if(status == '1'){
-      return 'M';
-    } else if(status == '2'){
-      return 'MN';
-    } else if(status == '3'){
-      return 'LP';
-    } else if(status == '4'){
-      return 'MP';
-    } else if(status == '5') {
-      return 'HP';
-    } else if(status == '6') {
-      return 'D';
-    } else {
-      return '';
-    }
   }
 
   onAddForm() {

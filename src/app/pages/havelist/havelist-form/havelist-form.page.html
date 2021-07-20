@@ -35,39 +35,39 @@
     <form [formGroup]="cardForm">
       <ion-item>
         <ion-label>Card Name: </ion-label>
-        <ion-input formControlName="name"></ion-input>
+        <ion-input disabled="true" [value]="card.name"></ion-input>
       </ion-item>
       <ion-item>
         <ion-label>Collection: </ion-label>
-        <ion-input formControlName="setName"></ion-input>
+        <ion-input disabled="true" [value]="card.setName"></ion-input>
       </ion-item>
       <ion-item>
         <ion-label>Quality: </ion-label>
-        <ion-select formControlName="quality"  interface="action-sheet">
-          <ion-select-option value="1">Mint (M)</ion-select-option>
-          <ion-select-option value="2">Near Mint (MN)</ion-select-option>
-          <ion-select-option value="3">Lightly Played (LP)</ion-select-option>
-          <ion-select-option value="4">Moderately Played (MP)</ion-select-option>
-          <ion-select-option value="5">Heavily Played (HP)</ion-select-option>
-          <ion-select-option value="6">Damaged (D)</ion-select-option>
+        <ion-select formControlName="quality" (ionChange)="onEnableButton()" interface="action-sheet">
+          <ion-select-option value="M">Mint (M)</ion-select-option>
+          <ion-select-option value="NM">Near Mint (MN)</ion-select-option>
+          <ion-select-option value="LP">Lightly Played (LP)</ion-select-option>
+          <ion-select-option value="MP">Moderately Played (MP)</ion-select-option>
+          <ion-select-option value="HP">Heavily Played (HP)</ion-select-option>
+          <ion-select-option value="D">Damaged (D)</ion-select-option>
         </ion-select>
       </ion-item>
       <ion-item>
         <ion-label>Language: </ion-label>
         <ion-select formControlName="language"  interface="action-sheet">
-          <ion-select-option value="1">English (ENG)</ion-select-option>
-          <ion-select-option value="2">Portuguese (POR)</ion-select-option>
-          <ion-select-option value="3">Spanish (SPA)</ion-select-option>
-          <ion-select-option value="4">French (FRE)</ion-select-option>
-          <ion-select-option value="5">Italian (ITA)</ion-select-option>
-          <ion-select-option value="6">Japan (JAP)</ion-select-option>
-          <ion-select-option value="7">Chinese (CHI)</ion-select-option>
-          <ion-select-option value="8">Russian (RUS)</ion-select-option>
-          <ion-select-option value="9">Korean (KOR)</ion-select-option>
-          <ion-select-option value="10">Other</ion-select-option>
+          <ion-select-option value="ENG">English (ENG)</ion-select-option>
+          <ion-select-option value="POR">Portuguese (POR)</ion-select-option>
+          <ion-select-option value="SPA">Spanish (SPA)</ion-select-option>
+          <ion-select-option value="FRE">French (FRE)</ion-select-option>
+          <ion-select-option value="ITA">Italian (ITA)</ion-select-option>
+          <ion-select-option value="JAP">Japan (JAP)</ion-select-option>
+          <ion-select-option value="CHI">Chinese (CHI)</ion-select-option>
+          <ion-select-option value="RUS">Russian (RUS)</ion-select-option>
+          <ion-select-option value="KOR">Korean (KOR)</ion-select-option>
+          <ion-select-option value="Other">Other</ion-select-option>
         </ion-select>
       </ion-item>
-        <ion-button (click)="addCard()" [disabled]="cardForm.valid == false ? true : false" class="ion-margin-top" expand="full" shape="round">
+        <ion-button (click)="addCard()" [disabled]="enableButton == false ? true : false" class="ion-margin-top" expand="full" shape="round">
         Add Card
       </ion-button>
     </form>

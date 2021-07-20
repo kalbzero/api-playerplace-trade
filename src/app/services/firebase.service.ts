@@ -170,8 +170,8 @@ export class FirebaseService {
   }
 
   async deleteCardInWantList(uid: string){
-    // return this.afs.collection('wantlist').doc(uid).delete();
-    return await this.afs.doc(`wantlist/${uid}`).delete();
+    return this.afs.collection('wantlist').doc(uid).delete();
+    // return await this.afs.doc(`wantlist/${uid}`).delete();
   }
 
   // https://firebase.google.com/docs/firestore/solutions/geoqueries

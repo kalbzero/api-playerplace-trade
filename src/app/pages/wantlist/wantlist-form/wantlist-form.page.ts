@@ -16,14 +16,11 @@ export class WantlistFormPage implements OnInit {
     searchCard: new FormControl('', [Validators.required, ])
   });
   cardForm: FormGroup = new FormGroup({
-    id_card: new FormControl({value: '', disabled: true}, [Validators.required, ]),
-    name: new FormControl({value: '', disabled: true}, [Validators.required, ]),
-    setName: new FormControl({value: '', disabled: true}, [Validators.required, ]),
-    quality: new FormControl({value: ''}, [Validators.required, ]),
-    language: new FormControl({value: ''}, [Validators.required, ]),
+    quality: new FormControl('', [Validators.required, ]),
+    language: new FormControl('', [Validators.required, ]),
   });
   cards: any[] = [];
-  card: any = {};
+  card: any = { id_card: '', name: '', setName: '', quality: '', language: '', type_list: '', id_user: '', city: '', state: '', longitude: '', latitude: '', hash: ''};
   isList: boolean = false;
   showFormAdd: boolean = false;
   enableButton: boolean = false;
@@ -66,32 +63,39 @@ export class WantlistFormPage implements OnInit {
 
   onGetCardInfos(card: any){
     
-    this.card = card;
     this.isList = false;
     this.showFormAdd = true;
 
-    this.cardForm.patchValue({
-      id_card: card.multiverseid,
-      name: card.name,
-      setName: card.setName,
-    });
+    this.card.id_card = card.multiverseid;
+    this.card.name = card.name;
+    this.card.setName = card.setName;
+  }
+
+  onEnableButton(){
+    const quality: string = this.cardForm.controls['quality'].value;
+    const language: string = this.cardForm.controls['language'].value;
+    console.log(quality, language);
+    if( quality != '' && language != ''){
+      this.enableButton = true;
+    }
   }
 
   async addCard(){
     const loading = await this.loadingController.create();
     await loading.present();
 
-    let obj = {
-      id_card: this.cardForm.get('id_card').value,
-      name: this.cardForm.get('name').value,
-      setName: this.cardForm.get('setName').value,
-      id_quality: this.cardForm.get('quality').value,
-      id_language: this.cardForm.get('language').value,
-      type_list: '1',
-      id_user: this.firebaseService.currentUser.uid
-    }
-    let response = this.firebaseService.addCardInWantlist(obj);
-    console.log(response);
+    
+    this.card.quality = this.cardForm.get('quality').value;
+    this.card.language = this.cardForm.get('language').value;
+    this.card.type_list = '2';
+    this.card.id_user = this.firebaseService.currentUser.uid;
+    this.card.city = this.firebaseService.currentUser.city,
+    this.card.state = this.firebaseService.currentUser.state,
+    this.card.longitude = this.firebaseService.currentUser.longitude,
+    this.card.latitude = this.firebaseService.currentUser.latitude,
+    this.card.hash = this.firebaseService.currentUser.hash,
+    
+    this.firebaseService.addCardInWantlist(this.card);
     loading.dismiss();
 
     const alert = await this.alertController.create({
@@ -101,9 +105,7 @@ export class WantlistFormPage implements OnInit {
         {
           text: 'OK',
           handler: () => {
-            this.card = {};
-            this.isList = false;
-            this.showFormAdd = false;
+            this.router.navigateByUrl('wantlist');
           }
         },
       ]

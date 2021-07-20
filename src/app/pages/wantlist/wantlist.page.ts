@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AlertController } from '@ionic/angular';
+import { AlertController, LoadingController } from '@ionic/angular';
 import { User } from 'src/app/interfaces/user';
 import { FirebaseService } from 'src/app/services/firebase.service';
 
@@ -18,6 +18,7 @@ export class WantlistPage implements OnInit {
   constructor(
     private alertController: AlertController,
     private firebaseService: FirebaseService,
+    private loadingController: LoadingController,
     private router: Router,
   ) { 
     if(this.firebaseService.currentUser == null){
@@ -52,7 +53,7 @@ export class WantlistPage implements OnInit {
     await alert.present();
   }
 
-  async onModalDelete(id: number) {
+  async onModalDelete(uid: string) {
     const alert = await this.alertController.create({
       cssClass: 'my-custom-class',
       header: 'Deletar Carta da Lista',
@@ -63,14 +64,12 @@ export class WantlistPage implements OnInit {
           role: 'cancel',
           cssClass: 'secondary',
           handler: () => {
-            console.log('Cancelou!');
             this.alertController.dismiss();
           }
         }, {
           text: 'Okay',
           handler: () => {
-            console.log('Confirm Okay');
-            this.onDelete(id);
+            this.onDelete(uid);
           }
         }
       ]
@@ -78,54 +77,38 @@ export class WantlistPage implements OnInit {
     await alert.present();
   }
 
-  private onDelete(id:number) {
-    console.log('Deletou!: '+id);
+  private onDelete(uid: string) {
+    this.firebaseService.deleteCardInWantList(uid).then();
+    this.getMyWantList();
   }
 
-  private getMyWantList() {
-   this.firebaseService.getWantlist(this.user.uid).subscribe(
-        (response: any)=>{
-          console.log(response);
-          response.forEach( card => {
-            this.cards.push({
-              name: card.name,
-              status: this.getStatusCard(card.id_quality),
-              id_card: card.id_card,
-            })
-            this.cardsBK.push({
-              name: card.name,
-              status: this.getStatusCard(card.id_quality),
-              id_card: card.id_card,
-            })
-          });
-          
-        }
-      )
-  }
-
-  private getStatusCard(status: string){
-    if(status == '1'){
-      return 'M';
-    } else if(status == '2'){
-      return 'MN';
-    } else if(status == '3'){
-      return 'LP';
-    } else if(status == '4'){
-      return 'MP';
-    } else if(status == '5') {
-      return 'HP';
-    } else if(status == '6') {
-      return 'D';
-    } else {
-      return '';
-    }
+  private async getMyWantList() {
+    this.cards = [];
+    this.cardsBK = [];
+    const loading = await this.loadingController.create();
+    await loading.present();
+    this.firebaseService.getWantlist(this.user.uid).subscribe(
+      (response: any)=>{
+        this.cards = [];
+        this.cardsBK = [];
+        response.forEach( card => {
+          this.cards.push({
+            name: card.name,
+            status: card.quality,
+            uid: card.uid,
+          })
+        });
+        this.cardsBK = this.cards
+        loading.dismiss();
+      }
+    )
   }
 
   onAddForm() {
     this.router.navigateByUrl('wantlist/wantlist-form');
   }
 
-  async onSearchCards($event){
+  async onSearchCardsIntheList($event){
     const searchTerm = $event.target.value;
     this.cards = this.cardsBK;
 

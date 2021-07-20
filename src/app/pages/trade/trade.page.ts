@@ -39,7 +39,7 @@ export class TradePage implements OnInit {
 
   private getMyTradesList() {
     this.firebaseService.getMyTradesBuyer(this.firebaseService.currentUser.uid).subscribe({
-      next: (trades: any) => { 
+      next: (trades: any) => {
         trades.forEach( trade => {
           const otherUser = trade.seller_name === this.firebaseService.currentUser.displayName ? trade.buyer_name : trade.seller_name;
           console.log(otherUser, trade.buyer_name , trade.seller_name, trade);
