@@ -87,6 +87,7 @@ export class WantlistPage implements OnInit {
     this.cardsBK = [];
     const loading = await this.loadingController.create();
     await loading.present();
+    
     this.firebaseService.getWantlist(this.user.uid).subscribe(
       (response: any)=>{
         this.cards = [];

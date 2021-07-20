@@ -94,7 +94,7 @@ export class WantlistFormPage implements OnInit {
     this.card.longitude = this.firebaseService.currentUser.longitude,
     this.card.latitude = this.firebaseService.currentUser.latitude,
     this.card.hash = this.firebaseService.currentUser.hash,
-    
+    console.log(this.card);
     this.firebaseService.addCardInWantlist(this.card);
     loading.dismiss();
 

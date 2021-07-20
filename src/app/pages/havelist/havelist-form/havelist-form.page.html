@@ -54,7 +54,7 @@
       </ion-item>
       <ion-item>
         <ion-label>Language: </ion-label>
-        <ion-select formControlName="language"  interface="action-sheet">
+        <ion-select formControlName="language" (ionChange)="onEnableButton()" interface="action-sheet">
           <ion-select-option value="ENG">English (ENG)</ion-select-option>
           <ion-select-option value="POR">Portuguese (POR)</ion-select-option>
           <ion-select-option value="SPA">Spanish (SPA)</ion-select-option>

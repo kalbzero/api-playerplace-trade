@@ -89,19 +89,20 @@ export class HaveListPage implements OnInit {
     await loading.present();
 
     this.firebaseService.getHavelist(this.user.uid).subscribe(
-        (response: any)=>{
-          response.forEach( card => {
-            this.cards.push({
-              name: card.name,
-              status: card.quality,
-              id_card: card.id_card,
-              uid: card.uid
-            })
-          });
-          this.cardsBK = this.cards
-          loading.dismiss();
-        }
-      )
+      (response: any)=>{
+        this.cards = [];
+        this.cardsBK = [];
+        response.forEach( card => {
+          this.cards.push({
+            name: card.name,
+            status: card.quality,
+            uid: card.uid,
+          })
+        });
+        this.cardsBK = this.cards
+        loading.dismiss();
+      }
+    )
   }
 
   onAddForm() {
