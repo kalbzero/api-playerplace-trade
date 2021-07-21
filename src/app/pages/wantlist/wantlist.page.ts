@@ -88,8 +88,8 @@ export class WantlistPage implements OnInit {
     const loading = await this.loadingController.create();
     await loading.present();
     
-    this.firebaseService.getWantlist(this.user.uid).subscribe(
-      (response: any)=>{
+    this.firebaseService.getWantlist(this.user.uid).subscribe({
+      next: (response: any)=>{
         this.cards = [];
         this.cardsBK = [];
         response.forEach( card => {
@@ -102,7 +102,7 @@ export class WantlistPage implements OnInit {
         this.cardsBK = this.cards
         loading.dismiss();
       }
-    )
+    })
   }
 
   onAddForm() {

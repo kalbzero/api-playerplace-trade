@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { LoadingController } from '@ionic/angular';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { FirebaseService } from 'src/app/services/firebase.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-search',
@@ -10,54 +11,12 @@ import { AngularFirestore } from '@angular/fire/firestore';
 export class SearchPage implements OnInit {
 
   cards: any[] = [];
-  cardsBk: any[] = [
-    {
-      name: 'Gideon',
-      status: 'NM',
-      location: 'Porto Alegre/RS',
-      id_owner: '2',
-    },
-    {
-      name: 'Liliana',
-      status: 'NM',
-      location: 'Canoas/RS',
-      id_owner: '2',
-    },
-    {
-      name: 'Jace',
-      status: 'HP',
-      location: 'Esteio/RS',
-      id_owner: '2',
-    },
-    {
-      name: 'Karn',
-      status: 'LP',
-      location: 'Sapucaia do Sul/RS',
-      id_owner: '2',
-    },
-    {
-      name: 'Nicol Bolas',
-      status: 'MP',
-      location: 'São Leopoldo/RS',
-      id_owner: '2',
-    },
-    {
-      name: 'Ajani',
-      status: 'LP',
-      location: 'Novo Hamburgo/RS',
-      id_owner: '',
-    },
-    {
-      name: 'Nissa',
-      status: 'NM',
-      location: 'Nova Santa Rita/RS',
-      id_owner: '',
-    },
-  ];
+  cardsBk: any[] = [];
   
   constructor(
-    private firestore: AngularFirestore,
     private loadingController: LoadingController,
+    private firebaseService: FirebaseService, 
+    private router: Router,
     ) { 
     
   }
@@ -70,14 +29,7 @@ export class SearchPage implements OnInit {
     const searchTerm = $event.target.value;
     this.cards = this.cardsBk;
 
-    // loading
-    // const loading = await this.loadingController.create({
-    //   cssClass: 'my-custom-class',
-    //   message: 'Procurando carta...',
-    //   duration: 2000
-    // });
-    // await loading.present();
-    // loading.dismiss();
+    
 
     // Termo em branco, não busca no banco
     if(!searchTerm) {
@@ -93,7 +45,90 @@ export class SearchPage implements OnInit {
   }
 
   private getCardsList() {
-    // get id_user, do request and put the array<trade> in 
-    this.cards = this.cardsBk;
+
+    this.firebaseService.getSearchCardsByCity().subscribe({
+      next: (cardsCity)=>{
+        this.cards = [];
+        this.cardsBk = [];
+        if(cardsCity.length == 0){
+          this.firebaseService.getSearchCardsByState().subscribe({
+            next: (cardsState)=>{
+              this.cards = [];
+              this.cardsBk = [];
+              if(cardsState.length == 0){
+                this.firebaseService.getSearchCardsByCountry().subscribe({
+                  next: (cardsCountry)=>{
+                    this.cards = [];
+                    this.cardsBk = [];
+                    cardsCountry.forEach( (card: any) => {
+                      this.cards.push({
+                        id_card: card.id_card,
+                        name: card.name,
+                        setName: card.setName,
+                        quality: card.quality,
+                        language: card.language,
+                        type_list: card.type_list,
+                        id_user: card.id_user,
+                        city: card.city,
+                        state: card.state,
+                        country: card.country,
+                        longitude: card.longitude,
+                        latitude: card.latitude,
+                        hash: card.hash,
+                        location: card.state == '' ? '': card.state + '/'+ card.city,
+                      });
+                    });
+                  }
+                });
+              } else {
+                cardsState.forEach( (card: any) => {
+                  this.cards.push({
+                    id_card: card.id_card,
+                    name: card.name,
+                    setName: card.setName,
+                    quality: card.quality,
+                    language: card.language,
+                    type_list: card.type_list,
+                    id_user: card.id_user,
+                    city: card.city,
+                    state: card.state,
+                    country: card.country,
+                    longitude: card.longitude,
+                    latitude: card.latitude,
+                    hash: card.hash,
+                    location: card.state == '' ? '': card.state + '/'+ card.city,
+                  });
+                });
+              }
+            }
+          });
+        } else {
+          cardsCity.forEach( (card: any) => {
+            this.cards.push({
+              id_card: card.id_card,
+              name: card.name,
+              setName: card.setName,
+              quality: card.quality,
+              language: card.language,
+              type_list: card.type_list,
+              id_user: card.id_user,
+              city: card.city,
+              state: card.state,
+              country: card.country,
+              longitude: card.longitude,
+              latitude: card.latitude,
+              hash: card.hash,
+              location: card.state == '' ? '': card.state + '/'+ card.city,
+            });
+          });
+        }
+        
+        this.cardsBk = this.cards;
+      }
+    });
+  }
+
+  createTrade(trade: any){
+    console.log(trade);
   }
 }

@@ -20,7 +20,7 @@ export class HavelistFormPage implements OnInit {
     language: new FormControl('', [Validators.required, ]),
   });
   cards: any[] = [];
-  card: any = { id_card: '', name: '', setName: '', quality: '', language: '', type_list: '', id_user: '', city: '', state: '', longitude: '', latitude: '', hash: ''};
+  card: any = { id_card: '', name: '', setName: '', quality: '', language: '', type_list: '', id_user: '', city: '', state: '', country: '', longitude: '', latitude: '', hash: ''};
   isList: boolean = false;
   showFormAdd: boolean = false;
   enableButton: boolean = false;
@@ -90,6 +90,7 @@ export class HavelistFormPage implements OnInit {
     this.card.id_user = this.firebaseService.currentUser.uid;
     this.card.city = this.firebaseService.currentUser.city;
     this.card.state = this.firebaseService.currentUser.state;
+    this.card.country = this.firebaseService.currentUser.country;
     this.card.longitude = this.firebaseService.currentUser.longitude;
     this.card.latitude = this.firebaseService.currentUser.latitude;
     this.card.hash = this.firebaseService.currentUser.hash;

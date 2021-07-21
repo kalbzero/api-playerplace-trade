@@ -175,25 +175,37 @@ export class FirebaseService {
   }
 
   // https://firebase.google.com/docs/firestore/solutions/geoqueries
-  getSearchCards(city: string, state: string){
-    const collection = this.afs.collection('havelist', (ref) => ref.where('city','==',city));
+  // Search
+  getSearchCardsByCity(){
+    const collection = this.afs.collection('havelist', (ref) => ref.where('city','==',this.currentUser.city));
     const cards$ = collection.valueChanges().pipe(
       map( cards => {
-        if(cards.length > 0){
-          // Se nao tiver cartas na cidade, busca no estado
-          const collection = this.afs.collection('havelist', (ref) => ref.where('state','==',state));
-          const cards$ = collection.valueChanges().pipe(
-            map( cards => {
-              return cards;
-            })
-          );
-          return cards$;
-        }
+        return cards
       })
     )
     return cards$;
   }
 
+  getSearchCardsByState(){
+    const collection = this.afs.collection('havelist', (ref) => ref.where('state','==',this.currentUser.state));
+    const cards$ = collection.valueChanges().pipe(
+      map( cards => {
+        return cards
+      })
+    )
+    return cards$;
+  }
+
+  getSearchCardsByCountry(){
+    const collection = this.afs.collection('havelist', (ref) => ref.where('country','==',this.currentUser.country));
+    const cards$ = collection.valueChanges().pipe(
+      map( cards => {
+        return cards
+      })
+    )
+    return cards$;
+  }
+  
   // Trades
   getMyTradesBuyer(uid){
     const collectionBuyer = this.afs.collection('trades', (ref) => ref.where('id_buyer','==',uid));

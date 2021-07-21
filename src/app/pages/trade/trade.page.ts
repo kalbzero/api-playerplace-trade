@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FirebaseService } from 'src/app/services/firebase.service';
-import { TradePageRoutingModule } from './trade-routing.module';
 import { Router } from '@angular/router';
 
 @Component({

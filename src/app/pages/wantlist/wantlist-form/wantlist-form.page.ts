@@ -89,11 +89,12 @@ export class WantlistFormPage implements OnInit {
     this.card.language = this.cardForm.get('language').value;
     this.card.type_list = '2';
     this.card.id_user = this.firebaseService.currentUser.uid;
-    this.card.city = this.firebaseService.currentUser.city,
-    this.card.state = this.firebaseService.currentUser.state,
-    this.card.longitude = this.firebaseService.currentUser.longitude,
-    this.card.latitude = this.firebaseService.currentUser.latitude,
-    this.card.hash = this.firebaseService.currentUser.hash,
+    this.card.city = this.firebaseService.currentUser.city;
+    this.card.state = this.firebaseService.currentUser.state;
+    this.card.country = this.firebaseService.currentUser.country;
+    this.card.longitude = this.firebaseService.currentUser.longitude;
+    this.card.latitude = this.firebaseService.currentUser.latitude;
+    this.card.hash = this.firebaseService.currentUser.hash;
     console.log(this.card);
     this.firebaseService.addCardInWantlist(this.card);
     loading.dismiss();
