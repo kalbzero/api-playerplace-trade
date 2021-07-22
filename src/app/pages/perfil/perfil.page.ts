@@ -143,37 +143,55 @@ export class PerfilPage implements OnInit {
     this.firebaseService.getUserByUid(this.firebaseService.currentUser.uid).subscribe({
       next: async (user)=>{
         this.loggedUser = user;
-        //criar nome da sala
-        // logout destroi a sessao, ai o listener chama essa funcao
-        console.log(user);
-        if(this.loggedUser.uid > this.anotherUser.uid){
-          this.chatRoomName = this.loggedUser.uid + this.anotherUser.uid;
-          this.openRoomChat();
-        } else if(this.loggedUser.uid < this.anotherUser.uid) {
-          this.chatRoomName = this.anotherUser.uid + this.loggedUser.uid;
-          this.openRoomChat();
-        } else {
-          const alert = await this.alertController.create({
-            header: "You don't have friends to talk?",
-            message: "You can't create a room chat with yourself!",
-            buttons: [
-              {
-                text: 'OK',
-                handler: () => {
-                  alert.dismiss();
-                }
-              },
-            ]
-          });
-          await alert.present();
+        
+        // logout destroi a sessao, ai o listener chama essa funcao, então verifico se o user existe ou não
+        if(user != undefined){
+          if(this.loggedUser.uid > this.anotherUser.uid){
+            this.chatRoomName = this.loggedUser.uid + this.anotherUser.uid;
+            this.openRoomChat();
+          } else if(this.loggedUser.uid < this.anotherUser.uid) {
+            this.chatRoomName = this.anotherUser.uid + this.loggedUser.uid;
+            this.openRoomChat();
+          } else {
+            const alert = await this.alertController.create({
+              header: "You don't have friends to talk?",
+              message: "You can't create a room chat with yourself!",
+              buttons: [
+                {
+                  text: 'OK',
+                  handler: () => {
+                    alert.dismiss();
+                  }
+                },
+              ]
+            });
+            await alert.present();
+          }
         }
       }
     });
   }
   openRoomChat(){
     this.firebaseService.getChatRoomById(this.chatRoomName).subscribe({
-      next: (chatRoom)=>{
-
+      next: (chatRoom: any)=>{
+        console.log('Aqui:',chatRoom);
+        if(chatRoom == undefined){
+          const obj = {
+            name: this.chatRoomName,
+            uid: '',
+            anotherUser: this.anotherUser.displayName,
+            loggedUser: this.loggedUser.displayName,
+            id_anotherUser: this.anotherUser.uid,
+            id_loggedUser: this.loggedUser.uid,
+            messages: [{msg: 'Oi', from: this.anotherUser.uid, createdAt: ''}]
+          };
+          this.firebaseService.createChatRoom(obj).then(
+            (uid)=>{ this.router.navigateByUrl('chat/'+uid)}
+          );
+        } else {
+          this.router.navigateByUrl('chat/'+chatRoom.uid)
+        }
+        
       }
     });
   }

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { Router } from '@angular/router';
+import { User } from 'src/app/interfaces/user';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-trade',
@@ -9,15 +11,46 @@ import { Router } from '@angular/router';
 })
 export class TradePage implements OnInit {
 
+  user: User;
   myTrades: any[] = [];
   myTradesBK: any[] = [];
 
-  constructor(private firebaseService: FirebaseService, private router: Router,) { 
-    
+  constructor(
+    private firebaseService: FirebaseService, 
+    private router: Router,
+    private alertController: AlertController,
+  ) { 
+    if(this.firebaseService.currentUser == null){
+      this.user = {displayName:'', email: '', uid: '', photo: '../../../assets/gideon.png'}
+    } else {
+      this.user = this.firebaseService.currentUser;
+    }
   }
 
   ngOnInit() {
-    this.getMyTradesList();
+    
+    if(this.user.uid != ''){
+      this.getMyTradesList();
+    } else {
+      this.doLogin();
+    }
+  }
+
+  async doLogin(){
+    const alert = await this.alertController.create({
+      header: 'You are not logged in!',
+      message: "Comeback to login page!",
+      buttons: [
+        {
+          text: 'OK',
+          handler: () => {
+            this.router.navigateByUrl('/');
+          }
+        },
+      ]
+    });
+
+    await alert.present();
   }
 
   async onSearchCards($event){

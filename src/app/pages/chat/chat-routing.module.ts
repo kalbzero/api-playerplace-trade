@@ -7,6 +7,10 @@ const routes: Routes = [
   {
     path: '',
     component: ChatPage
+  },
+  {
+    path: '/:id',
+    component: ChatPage
   }
 ];
 

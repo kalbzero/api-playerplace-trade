@@ -19,14 +19,14 @@ const routes: Routes = [
   {
     path: '',
     loadChildren: () => import('./pages/login/login.module').then( m => m.LoginPageModule),
-    // canActivate: [AngularFireAuth],
-    // data: {authGuardPipe: redirectLoggedInToHome}
   },
-  {  // https://www.youtube.com/watch?v=xNleEVG9_yA
+  {
     path: 'chat',
     loadChildren: () => import('./pages/chat/chat.module').then( m => m.ChatPageModule),
-    // canActivate: [AngularFireAuth],
-    // data: {authGuardPipe: redirectUnauthorizedToLogin}
+  },
+  {
+    path: 'chat/:id',
+    loadChildren: () => import('./pages/chat/chat.module').then( m => m.ChatPageModule),
   },
   {
     path: 'signup',

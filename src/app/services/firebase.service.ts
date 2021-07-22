@@ -28,7 +28,7 @@ export class FirebaseService {
     );
   }
 
-  // Login, Logout, Cadastro e Recuepração de Senha
+  // Login, Logout, Cadastro e Recuperação de Senha
   async signUp(email: string, password: string, displayName: string, sex: string, photo: string,
     street: string, number: string, complement: string, neighboardhood: string, city: string, state: string, country: string, 
     cep: string, latitude: string, longitude: string, hash: string){
@@ -102,14 +102,6 @@ export class FirebaseService {
   
   // Chat
   // https://stackoverflow.com/questions/33540479/best-way-to-manage-chat-channels-in-firebase
-  addChatMessage(msg){
-    return this.afs.collection('messages').add({
-      msg: msg,
-      from: this.currentUser.uid,
-      createdAt: firebase.default.firestore.FieldValue.serverTimestamp()
-    });
-  }
-
   getMyChatRooms1(uid: string){
     const collection = this.afs.collection('chat', (ref) => ref.where('loggedUser','==',uid));
     const chatRooms$ = collection.valueChanges().pipe(
@@ -130,8 +122,8 @@ export class FirebaseService {
     return chatRooms$;
   }
 
-  getChatRoomById(uid: string){
-    const collection = this.afs.collection('chat', (ref) => ref.where('uid','==',uid));
+  getChatRoomById(name: string){
+    const collection = this.afs.collection('chatroom', (ref) => ref.where('name','==',name));
     const chatRoom$ = collection.valueChanges().pipe(
       map( (chatRoom) => {
         return chatRoom[0]
@@ -140,29 +132,61 @@ export class FirebaseService {
     return chatRoom$;
   }
 
-  getUsersForMsg(msgFromId, users: User[]): string {
+  async createChatRoom(chatRoom: any){
+    const { id } = await this.afs.collection('chatroom').add(chatRoom);
+    this.afs.collection('chatroom').doc(id).update({uid: id});
+    return id;
+  }
+
+  getUsersForMsg(msgFromId, users: any[]): string {
     for(let usr of users){
       if(usr.uid == msgFromId){
-        return usr.email;
+        return usr.displayName;
       }
     }
   }
 
-  getChatMessages() { //mudar para pegar só a sala 1-1
-    let users: User[];
-    return this.getUsers().pipe(
-      switchMap(res => {
-        users = res;
-        return this.afs.collection<Message>('messages', ref => ref.orderBy('createdAt')).valueChanges({ idField: 'id'});
-      }),
-      map(messages => {
-        for(let m of messages){ 
-          m.fromName = this.getUsersForMsg(m.from, users);
+  getChatMessages(chatroom: string) { //mudar para pegar só a sala 1-1
+    const collection = this.afs.collection('chatroom', (ref) => ref.where('name','==',chatroom));
+    const messages$ = collection.valueChanges().pipe(
+      map( (chatroom: any) => {
+        console.log(chatroom);
+        const anotherUser = {uid: chatroom[0].id_anotherUser, displayName: chatroom[0].anotherUser};
+        const loggedUser = {uid: chatroom[0].id_loggedUserr, displayName: chatroom[0].loggedUserr};
+
+        for(let m of chatroom[0].messages){
+          m.fromName = this.getUsersForMsg(m.from, [anotherUser,loggedUser]);
           m.myMsg = this.currentUser.uid === m.from;
         }
-        return messages;
+
+        return chatroom[0].messages;
       })
-    );
+    )
+    return messages$;
+    // let users: User[];
+    // return this.getUsers().pipe(
+    //   switchMap(res => {
+    //     users = res;
+    //     return this.afs.collection<Message>('messages', ref => ref.orderBy('createdAt')).valueChanges({ idField: 'id'});
+    //   }),
+    //   map(messages => {
+    //     for(let m of messages){ 
+    //       m.fromName = this.getUsersForMsg(m.from, users);
+    //       m.myMsg = this.currentUser.uid === m.from;
+    //     }
+    //     return messages;
+    //   })
+    // );
+  }
+
+  addChatMessage(msg: string, chatRoom: string){
+    return this.afs.collection('chatroom').doc(chatRoom).update({
+      messages: firebase.default.firestore.FieldValue.arrayUnion({
+        msg: msg,
+        from: this.currentUser.uid,
+        createdAt: firebase.default.firestore.FieldValue.serverTimestamp()
+      })
+    });
   }
 
   // Havelist & Wantlist
