@@ -144,7 +144,8 @@ export class PerfilPage implements OnInit {
       next: async (user)=>{
         this.loggedUser = user;
         //criar nome da sala
-        
+        // logout destroi a sessao, ai o listener chama essa funcao
+        console.log(user);
         if(this.loggedUser.uid > this.anotherUser.uid){
           this.chatRoomName = this.loggedUser.uid + this.anotherUser.uid;
           this.openRoomChat();
@@ -171,6 +172,10 @@ export class PerfilPage implements OnInit {
   }
   openRoomChat(){
     console.log(this.chatRoomName);
-    this.firebaseService.getChatRoomById(this.chatRoomName);
+    this.firebaseService.getChatRoomById(this.chatRoomName).subscribe({
+      next: (chatRoom)=>{
+
+      }
+    });
   }
 }

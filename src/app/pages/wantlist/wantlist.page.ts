@@ -78,8 +78,7 @@ export class WantlistPage implements OnInit {
   }
 
   private onDelete(uid: string) {
-    this.firebaseService.deleteCardInWantList(uid).then();
-    this.getMyWantList();
+    this.firebaseService.deleteCardInWantList(uid).then(()=>{this.getMyWantList();});
   }
 
   private async getMyWantList() {

@@ -77,9 +77,8 @@ export class HaveListPage implements OnInit {
     await alert.present();
   }
 
-  private onDelete(uid:string) {
-    this.firebaseService.deleteCardInHaveList(uid);
-    this.getMyHaveList();
+  private onDelete(uid: string) {
+    this.firebaseService.deleteCardInHaveList(uid).then(()=>{this.getMyHaveList();});
   }
 
   private async getMyHaveList() {
@@ -88,8 +87,8 @@ export class HaveListPage implements OnInit {
     const loading = await this.loadingController.create();
     await loading.present();
 
-    this.firebaseService.getHavelist(this.user.uid).subscribe(
-      (response: any)=>{
+    this.firebaseService.getHavelist(this.user.uid).subscribe({
+      next: (response: any)=>{
         this.cards = [];
         this.cardsBK = [];
         response.forEach( card => {
@@ -102,7 +101,7 @@ export class HaveListPage implements OnInit {
         this.cardsBK = this.cards
         loading.dismiss();
       }
-    )
+    })
   }
 
   onAddForm() {

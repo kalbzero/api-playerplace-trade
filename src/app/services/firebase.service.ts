@@ -197,8 +197,8 @@ export class FirebaseService {
   }
 
   async deleteCardInHaveList(uid: string){
-    // return this.afs.collection('havelist').doc(uid).delete();
-    return await this.afs.doc(`havelist/${uid}`).delete();
+    return this.afs.collection('havelist').doc(uid).delete();
+    // return await this.afs.doc(`havelist/${uid}`).delete();
   }
 
   async deleteCardInWantList(uid: string){

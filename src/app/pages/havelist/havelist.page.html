@@ -21,7 +21,7 @@
     <ion-item class="container-background-color" *ngFor="let card of cards">
       <ion-label style="max-width: 50% !important;">{{card.name}}</ion-label>
       <ion-label style="max-width: 20% !important;">{{card.status}}</ion-label>
-      <ion-label style="max-width: 30% !important;"><ion-button (click)="onModalDelete(card.id_card)" color="danger">Delete</ion-button></ion-label>
+      <ion-label style="max-width: 30% !important;"><ion-button (click)="onModalDelete(card.uid)" color="danger">Delete</ion-button></ion-label>
     </ion-item>
   </ion-list>
 </ion-content>
