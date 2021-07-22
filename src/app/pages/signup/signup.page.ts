@@ -50,9 +50,9 @@ export class SignupPage implements OnInit {
     await loading.present();
 
     if(this.credentialForm.controls['photo'].value === "1"){
-      this.credentialForm.patchValue({photo: "../../../assets/gideon.png"});
-    } else {
       this.credentialForm.patchValue({photo: "../../../assets/liliana.png"});
+    } else {
+      this.credentialForm.patchValue({photo: "../../../assets/gideon.png"});
     }
 
     this.FirebaseService.signUp(

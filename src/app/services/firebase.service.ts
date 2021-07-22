@@ -145,7 +145,7 @@ export class FirebaseService {
     }
   }
 
-  getChatMessages(uid: string) { //mudar para pegar só a sala 1-1
+  getChatMessages(uid: string) {
     const collection = this.afs.collection('chatroom', (ref) => ref.where('uid','==',uid));
     const messages$ = collection.valueChanges().pipe(
       map( (chatroom: any) => {
@@ -160,20 +160,6 @@ export class FirebaseService {
       })
     )
     return messages$;
-    // let users: User[];
-    // return this.getUsers().pipe(
-    //   switchMap(res => {
-    //     users = res;
-    //     return this.afs.collection<Message>('messages', ref => ref.orderBy('createdAt')).valueChanges({ idField: 'id'});
-    //   }),
-    //   map(messages => {
-    //     for(let m of messages){ 
-    //       m.fromName = this.getUsersForMsg(m.from, users);
-    //       m.myMsg = this.currentUser.uid === m.from;
-    //     }
-    //     return messages;
-    //   })
-    // );
   }
 
   addChatMessage(msg: string, chatRoom: string){

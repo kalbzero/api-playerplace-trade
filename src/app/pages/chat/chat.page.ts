@@ -33,6 +33,7 @@ export class ChatPage implements OnInit {
   }
 
   ngOnInit() {
+    console.log('chat',this.user.uid);
     if(this.user.uid != ''){
       this.getMessages();
     } else {

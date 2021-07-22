@@ -144,7 +144,7 @@ export class PerfilPage implements OnInit {
     this.firebaseService.getUserByUid(this.firebaseService.currentUser.uid).subscribe({
       next: async (user)=>{
         this.loggedUser = user;
-        
+        console.log("perfil chat 1");
         // logout destroi a sessao, ai o listener chama essa funcao, então verifico se o user existe ou não
         if(user != undefined){
           if(this.loggedUser.uid > this.anotherUser.uid){
@@ -186,7 +186,7 @@ export class PerfilPage implements OnInit {
             messages: [{msg: 'Oi', from: this.anotherUser.uid, createdAt: firebase.default.firestore.Timestamp.now(),}]
           };
           this.firebaseService.createChatRoom(obj).then(
-            (uid)=>{ this.router.navigateByUrl('chat/'+uid); console.log("perfil chat");}
+            (uid)=>{console.log("perfil chat 2"); this.router.navigateByUrl('chat/'+uid);}
           );
         } else {
           this.router.navigateByUrl('chat/'+chatRoom.uid)
