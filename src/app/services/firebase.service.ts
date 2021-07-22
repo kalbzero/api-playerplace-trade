@@ -83,6 +83,22 @@ export class FirebaseService {
   recoverPassword(email: string){
     return this.afAuth.sendPasswordResetEmail(email);
   }
+
+  // User
+  getUsers() {
+    return this.afs.collection('users').valueChanges({ idField: 'uid'}) as Observable<User[]>
+  }
+
+  getUserByUid(uid: string){
+    const collection = this.afs.collection('users', (ref) => ref.where('uid','==',uid));
+    const user$ = collection.valueChanges().pipe(
+      map( (user: {}) => {
+        let aux: User = user[0];
+        return aux;
+      })
+    )
+    return user$;
+  }
   
   // Chat
   // https://stackoverflow.com/questions/33540479/best-way-to-manage-chat-channels-in-firebase
@@ -94,8 +110,8 @@ export class FirebaseService {
     });
   }
 
-  getMyChatsRoom1(uid: string){
-    const collection = this.afs.collection('chat', (ref) => ref.where('uid_buyer','==',uid));
+  getMyChatRooms1(uid: string){
+    const collection = this.afs.collection('chat', (ref) => ref.where('loggedUser','==',uid));
     const chatRooms$ = collection.valueChanges().pipe(
       map( (chatRooms) => {
         return chatRooms
@@ -104,8 +120,8 @@ export class FirebaseService {
     return chatRooms$;
   }
 
-  getMyChatsRoom2(uid: string){
-    const collection = this.afs.collection('chat', (ref) => ref.where('uid_seller','==',uid));
+  getMyChatRooms2(uid: string){
+    const collection = this.afs.collection('chat', (ref) => ref.where('anotherUser','==',uid));
     const chatRooms$ = collection.valueChanges().pipe(
       map( (chatRooms) => {
         return chatRooms
@@ -122,21 +138,6 @@ export class FirebaseService {
       })
     )
     return chatRoom$;
-  }
-
-  getUsers() {
-    return this.afs.collection('users').valueChanges({ idField: 'uid'}) as Observable<User[]>
-  }
-
-  getUserByUid(uid: string){
-    const collection = this.afs.collection('users', (ref) => ref.where('uid','==',uid));
-    const user$ = collection.valueChanges().pipe(
-      map( (user: {}) => {
-        let aux: User = user[0];
-        return aux;
-      })
-    )
-    return user$;
   }
 
   getUsersForMsg(msgFromId, users: User[]): string {

@@ -141,23 +141,36 @@ export class PerfilPage implements OnInit {
 
   openChat(){
     this.firebaseService.getUserByUid(this.firebaseService.currentUser.uid).subscribe({
-      next: (user)=>{
+      next: async (user)=>{
         this.loggedUser = user;
         //criar nome da sala
         
         if(this.loggedUser.uid > this.anotherUser.uid){
-          console.log(this.loggedUser.uid, ">", this.anotherUser.uid, this.loggedUser.uid > this.anotherUser.uid);
-          console.log("logged is bigger");
           this.chatRoomName = this.loggedUser.uid + this.anotherUser.uid;
+          this.openRoomChat();
         } else if(this.loggedUser.uid < this.anotherUser.uid) {
-          console.log(this.loggedUser.uid, "<", this.anotherUser.uid, this.loggedUser.uid > this.anotherUser.uid);
-          console.log("another is bigger");
           this.chatRoomName = this.anotherUser.uid + this.loggedUser.uid;
+          this.openRoomChat();
         } else {
-          console.log('Vixi...');
+          const alert = await this.alertController.create({
+            header: "You don't have friends to talk?",
+            message: "You can't create a room chat with yourself!",
+            buttons: [
+              {
+                text: 'OK',
+                handler: () => {
+                  alert.dismiss();
+                }
+              },
+            ]
+          });
+          await alert.present();
         }
-        // route to chat room 
       }
     });
+  }
+  openRoomChat(){
+    console.log(this.chatRoomName);
+    this.firebaseService.getChatRoomById(this.chatRoomName);
   }
 }
