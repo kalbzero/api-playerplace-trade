@@ -6,6 +6,7 @@ export interface Trade {
     quality: string,
     trades_type: string,
     id_trades_type: string,
+    id_trade_status: string,
     status: string,
     localization?: string,          // local da troca
     obs?: string

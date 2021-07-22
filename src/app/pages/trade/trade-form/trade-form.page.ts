@@ -11,7 +11,7 @@ import { FirebaseService } from 'src/app/services/firebase.service';
 })
 export class TradeFormPage implements OnInit {
 
-  trade: Trade = {buyer_name:'', buyer_status: '',card_name: '',id_buyer: '', id_seller: '',id_trades_type: '',quality: '',seller_name: '',seller_status: '',status: '',trades_type: '',uid: '',collection: '',id_card: '',localization: '',obs: '',security_postal_code_buyer: '',security_postal_code_seller: '', buyer_id_status: '', seller_id_status: ''};
+  trade: Trade = {buyer_name:'', buyer_status: '',card_name: '',id_buyer: '', id_seller: '',id_trades_type: '',quality: '',seller_name: '',seller_status: '',status: '', id_trade_status: '',trades_type: '',uid: '',collection: '',id_card: '',localization: '',obs: '',security_postal_code_buyer: '',security_postal_code_seller: '', buyer_id_status: '', seller_id_status: ''};
   userStatus: string = '';
   useridStatus: string = '';
   userObs: string = '';
@@ -294,6 +294,13 @@ export class TradeFormPage implements OnInit {
     }
     if(this.trade.buyer_status == this.trade.seller_status){
       this.trade.status = this.userStatus;
+    }
+    if(this.trade.status == 'progress'){
+      this.trade.id_trade_status = '1';
+    } else if (this.trade.status == 'complete'){
+      this.trade.id_trade_status = '2';
+    } else {
+      this.trade.id_trade_status = '3';
     }
     this.trade.obs = this.userObs == '' ? this.trade.obs : this.userObs;
     this.trade.trades_type = this.userTradeType == '' ? this.trade.trades_type : this.userTradeType;

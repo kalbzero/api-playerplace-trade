@@ -100,11 +100,11 @@ export class PerfilPage implements OnInit {
                   id: trade.uid,
                   status:trade.id_trade_status
                 })
-                if(trade.id_trade_status == 1){
+                if(trade.id_trade_status == '1'){
                   this.countProg++;
-                } else if(trade.id_trade_status == 2){
+                } else if(trade.id_trade_status == '2'){
                   this.countComp++;
-                } else if(trade.id_trade_status == 3) {
+                } else if(trade.id_trade_status == '3') {
                   this.countCanc++;
                 }
               })
@@ -117,11 +117,11 @@ export class PerfilPage implements OnInit {
                   id: trade.uid,
                   status:trade.id_trade_status
                 })
-                if(trade.id_trade_status == 1){
+                if(trade.id_trade_status == '1'){
                   this.countProg++;
-                } else if(trade.id_trade_status == 2){
+                } else if(trade.id_trade_status == '2'){
                   this.countComp++;
-                } else if(trade.id_trade_status == 3) {
+                } else if(trade.id_trade_status == '3') {
                   this.countCanc++;
                 }
               })
@@ -133,6 +133,7 @@ export class PerfilPage implements OnInit {
   }
 
   private updateGraphs(){
+    console.log(this.countComp, this.countProg, this.countCanc);
     this.pieChartData = [this.countComp, this.countProg, this.countCanc];
     this.pieChartLabels = [['Completed:' +this.countComp], ['In Progress: '+this.countProg], 'Canceled: '+this.countCanc];
     monkeyPatchChartJsTooltip();

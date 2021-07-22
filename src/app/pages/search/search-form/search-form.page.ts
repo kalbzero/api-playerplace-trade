@@ -85,6 +85,7 @@ export class SearchFormPage implements OnInit {
       trades_type: this.tradeForm.get('trades_type').value,
       id_trades_type: this.tradeForm.get('id_trades_type').value,
       status: 'progress',
+      id_trade_status: '1',
       localization: '',
       obs: '',
       id_buyer: this.firebaseService.currentUser.uid,

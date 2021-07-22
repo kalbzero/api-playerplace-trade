@@ -290,7 +290,8 @@ export class FirebaseService {
 
   updateTrade(trade: Trade){
     return this.afs.collection('trades').doc(trade.uid).update({
-      status: trade.status, 
+      status: trade.status,
+      id_trade_status: trade.id_trade_status,
       obs: trade.obs, 
       security_postal_code_buyer: trade.security_postal_code_buyer, 
       security_postal_code_seller: trade.security_postal_code_seller,
