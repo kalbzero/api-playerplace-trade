@@ -6,7 +6,6 @@ import { switchMap, map } from 'rxjs/operators';
 import * as firebase from 'firebase/app';
 
 import { User } from '../interfaces/user';
-import { Message } from '../interfaces/message';
 import { Trade } from '../interfaces/trade';
 // https://firebase.google.com/docs/auth/web/manage-users?hl=pt-br
 
@@ -146,19 +145,17 @@ export class FirebaseService {
     }
   }
 
-  getChatMessages(chatroom: string) { //mudar para pegar só a sala 1-1
-    const collection = this.afs.collection('chatroom', (ref) => ref.where('name','==',chatroom));
+  getChatMessages(uid: string) { //mudar para pegar só a sala 1-1
+    const collection = this.afs.collection('chatroom', (ref) => ref.where('uid','==',uid));
     const messages$ = collection.valueChanges().pipe(
       map( (chatroom: any) => {
-        console.log(chatroom);
         const anotherUser = {uid: chatroom[0].id_anotherUser, displayName: chatroom[0].anotherUser};
-        const loggedUser = {uid: chatroom[0].id_loggedUserr, displayName: chatroom[0].loggedUserr};
+        const loggedUser = {uid: chatroom[0].id_loggedUser, displayName: chatroom[0].loggedUser};
 
         for(let m of chatroom[0].messages){
           m.fromName = this.getUsersForMsg(m.from, [anotherUser,loggedUser]);
           m.myMsg = this.currentUser.uid === m.from;
         }
-
         return chatroom[0].messages;
       })
     )
@@ -184,7 +181,7 @@ export class FirebaseService {
       messages: firebase.default.firestore.FieldValue.arrayUnion({
         msg: msg,
         from: this.currentUser.uid,
-        createdAt: firebase.default.firestore.FieldValue.serverTimestamp()
+        createdAt: firebase.default.firestore.Timestamp.now(),
       })
     });
   }

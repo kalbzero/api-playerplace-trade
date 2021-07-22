@@ -5,6 +5,7 @@ import { ChartType, ChartOptions } from 'chart.js';
 import { SingleDataSet, Label, monkeyPatchChartJsLegend, monkeyPatchChartJsTooltip } from 'ng2-charts';
 import { User } from 'src/app/interfaces/user';
 import { FirebaseService } from 'src/app/services/firebase.service';
+import * as firebase from 'firebase/app';
 
 @Component({
   selector: 'app-perfil',
@@ -174,7 +175,6 @@ export class PerfilPage implements OnInit {
   openRoomChat(){
     this.firebaseService.getChatRoomById(this.chatRoomName).subscribe({
       next: (chatRoom: any)=>{
-        console.log('Aqui:',chatRoom);
         if(chatRoom == undefined){
           const obj = {
             name: this.chatRoomName,
@@ -183,10 +183,10 @@ export class PerfilPage implements OnInit {
             loggedUser: this.loggedUser.displayName,
             id_anotherUser: this.anotherUser.uid,
             id_loggedUser: this.loggedUser.uid,
-            messages: [{msg: 'Oi', from: this.anotherUser.uid, createdAt: ''}]
+            messages: [{msg: 'Oi', from: this.anotherUser.uid, createdAt: firebase.default.firestore.Timestamp.now(),}]
           };
           this.firebaseService.createChatRoom(obj).then(
-            (uid)=>{ this.router.navigateByUrl('chat/'+uid)}
+            (uid)=>{ this.router.navigateByUrl('chat/'+uid); console.log("perfil chat");}
           );
         } else {
           this.router.navigateByUrl('chat/'+chatRoom.uid)
