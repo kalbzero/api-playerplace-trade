@@ -198,12 +198,10 @@ export class FirebaseService {
 
   async deleteCardInHaveList(uid: string){
     return this.afs.collection('havelist').doc(uid).delete();
-    // return await this.afs.doc(`havelist/${uid}`).delete();
   }
 
   async deleteCardInWantList(uid: string){
     return this.afs.collection('wantlist').doc(uid).delete();
-    // return await this.afs.doc(`wantlist/${uid}`).delete();
   }
 
   // Search

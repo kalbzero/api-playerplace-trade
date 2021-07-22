@@ -100,7 +100,7 @@ export class SearchFormPage implements OnInit {
       security_postal_code_seller: '',
       uid:''
     }
-    console.log(obj);
+    
     this.firebaseService.createTrade(obj);
     loading.dismiss();
 

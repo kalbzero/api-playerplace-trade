@@ -312,8 +312,6 @@ export class TradeFormPage implements OnInit {
     this.trade.localization = this.userLocalization == '' ? this.trade.localization : this.userLocalization;
     this.isComplete = this.trade.status == 'complete' ? true : false;
 
-    console.log(this.trade);
-
     this.firebaseService.updateTrade(this.trade).then(
       (response)=>{ 
         loading.dismiss(); 

@@ -74,7 +74,6 @@ export class WantlistFormPage implements OnInit {
   onEnableButton(){
     const quality: string = this.cardForm.controls['quality'].value;
     const language: string = this.cardForm.controls['language'].value;
-    console.log(quality, language);
     if( quality != '' && language != ''){
       this.enableButton = true;
     }
@@ -96,7 +95,7 @@ export class WantlistFormPage implements OnInit {
     this.card.longitude = this.firebaseService.currentUser.longitude;
     this.card.latitude = this.firebaseService.currentUser.latitude;
     this.card.hash = this.firebaseService.currentUser.hash;
-    console.log(this.card);
+    
     this.firebaseService.addCardInWantlist(this.card);
     loading.dismiss();
 

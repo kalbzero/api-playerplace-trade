@@ -74,7 +74,6 @@ export class HavelistFormPage implements OnInit {
   onEnableButton(){
     const quality: string = this.cardForm.controls['quality'].value;
     const language: string = this.cardForm.controls['language'].value;
-    console.log(quality, language);
     if( quality != '' && language != ''){
       this.enableButton = true;
     }

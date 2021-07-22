@@ -171,7 +171,6 @@ export class PerfilPage implements OnInit {
     });
   }
   openRoomChat(){
-    console.log(this.chatRoomName);
     this.firebaseService.getChatRoomById(this.chatRoomName).subscribe({
       next: (chatRoom)=>{
 
