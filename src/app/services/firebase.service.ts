@@ -85,12 +85,43 @@ export class FirebaseService {
   }
   
   // Chat
+  // https://stackoverflow.com/questions/33540479/best-way-to-manage-chat-channels-in-firebase
   addChatMessage(msg){
     return this.afs.collection('messages').add({
       msg: msg,
       from: this.currentUser.uid,
       createdAt: firebase.default.firestore.FieldValue.serverTimestamp()
     });
+  }
+
+  getMyChatsRoom1(uid: string){
+    const collection = this.afs.collection('chat', (ref) => ref.where('uid_buyer','==',uid));
+    const chatRooms$ = collection.valueChanges().pipe(
+      map( (chatRooms) => {
+        return chatRooms
+      })
+    )
+    return chatRooms$;
+  }
+
+  getMyChatsRoom2(uid: string){
+    const collection = this.afs.collection('chat', (ref) => ref.where('uid_seller','==',uid));
+    const chatRooms$ = collection.valueChanges().pipe(
+      map( (chatRooms) => {
+        return chatRooms
+      })
+    )
+    return chatRooms$;
+  }
+
+  getChatRoomById(uid: string){
+    const collection = this.afs.collection('chat', (ref) => ref.where('uid','==',uid));
+    const chatRoom$ = collection.valueChanges().pipe(
+      map( (chatRoom) => {
+        return chatRoom[0]
+      })
+    )
+    return chatRoom$;
   }
 
   getUsers() {
@@ -174,10 +205,14 @@ export class FirebaseService {
     // return await this.afs.doc(`wantlist/${uid}`).delete();
   }
 
-  // https://firebase.google.com/docs/firestore/solutions/geoqueries
   // Search
-  getSearchCardsByCity(){
-    const collection = this.afs.collection('havelist', (ref) => ref.where('city','==',this.currentUser.city));
+  /**
+   * Algolia - https://stackoverflow.com/questions/22506531/how-to-perform-sql-like-operation-on-firebase
+   * @param cardName Nome da carta a ser procurada no banco de dados, só que o firebase não tem 'like' na consulta, a solução é usar um app terceiro como Algolia ou ElasticSearch
+   * @returns lista de cartas filtradas por cidade, estado ou pais
+   */
+  getSearchCardsByCity(cardName: string = ''){
+    const collection = this.afs.collection('havelist', (ref) => ref.where('city','==',this.currentUser.city).limit(100));
     const cards$ = collection.valueChanges().pipe(
       map( cards => {
         return cards
@@ -187,7 +222,7 @@ export class FirebaseService {
   }
 
   getSearchCardsByState(){
-    const collection = this.afs.collection('havelist', (ref) => ref.where('state','==',this.currentUser.state));
+    const collection = this.afs.collection('havelist', (ref) => ref.where('state','==',this.currentUser.state).limit(100));
     const cards$ = collection.valueChanges().pipe(
       map( cards => {
         return cards
@@ -197,7 +232,7 @@ export class FirebaseService {
   }
 
   getSearchCardsByCountry(){
-    const collection = this.afs.collection('havelist', (ref) => ref.where('country','==',this.currentUser.country));
+    const collection = this.afs.collection('havelist', (ref) => ref.where('country','==',this.currentUser.country).limit(100));
     const cards$ = collection.valueChanges().pipe(
       map( cards => {
         return cards
@@ -205,7 +240,22 @@ export class FirebaseService {
     )
     return cards$;
   }
-  
+
+  getSearchCardInfosToCreateTrade(uid: string){
+    const collection = this.afs.collection('havelist', (ref) => ref.where('uid','==',uid));
+    const cards$ = collection.valueChanges().pipe(
+      map( cards => {
+        return cards[0]
+      })
+    )
+    return cards$;
+  }
+
+  async createTrade(trade: any){
+    const { id } = await this.afs.collection('trades').add(trade);
+    return this.afs.collection('trades').doc(id).update({uid: id});
+  }
+
   // Trades
   getMyTradesBuyer(uid){
     const collectionBuyer = this.afs.collection('trades', (ref) => ref.where('id_buyer','==',uid));
@@ -238,10 +288,6 @@ export class FirebaseService {
     return trade$;
   }
 
-  addTrade(){
-
-  }
-
   updateTrade(trade: Trade){
     return this.afs.collection('trades').doc(trade.uid).update({
       status: trade.status, 
@@ -252,6 +298,9 @@ export class FirebaseService {
       seller_status: trade.seller_status,
       buyer_id_status: trade.buyer_id_status,
       seller_id_status: trade.seller_id_status,
+      localization: trade.localization,
+      trades_type: trade.trades_type,
+      id_trades_type: trade.id_trades_type,
     });
   }
 }

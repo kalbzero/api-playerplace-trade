@@ -16,6 +16,9 @@ export class TradeFormPage implements OnInit {
   useridStatus: string = '';
   userObs: string = '';
   userPostalCode: string = '';
+  userLocalization: string = '';
+  userIdTradeType: string = '';
+  userTradeType: string = '';
   isComplete: boolean = false;
   
   constructor(
@@ -61,11 +64,6 @@ export class TradeFormPage implements OnInit {
   }
 
   async editStatus(){
-    if(this.trade.id_seller == this.firebaseService.currentUser.uid){
-      this.userPostalCode = this.trade.security_postal_code_seller;
-    } else {
-      this.userPostalCode = this.trade.security_postal_code_buyer;
-    }
     const alert = await this.alertController.create({
       header: 'Edit Status',
       inputs: [
@@ -170,23 +168,95 @@ export class TradeFormPage implements OnInit {
     await alert.present();
   }
 
-  private updateStatus(){
-    if(this.trade.id_seller == this.firebaseService.currentUser.uid){
-      this.trade.seller_status = this.userStatus == '' ? this.trade.seller_status : this.userStatus;
-      this.trade.seller_id_status = this.useridStatus == '' ? this.trade.seller_id_status : this.useridStatus;
-      this.trade.security_postal_code_seller = this.userPostalCode == '' ? this.trade.security_postal_code_seller : this.userPostalCode;
-    } else {
-      this.trade.buyer_status = this.userStatus == '' ? this.trade.buyer_status : this.userStatus;
-      this.trade.buyer_id_status = this.useridStatus == '' ? this.trade.buyer_id_status : this.useridStatus;
-      this.trade.security_postal_code_buyer = this.userPostalCode == '' ? this.trade.security_postal_code_buyer : this.userPostalCode;
-    }
-    if(this.trade.buyer_status == this.trade.seller_status){
-      this.trade.status = this.userStatus;
-    }
-    this.trade.obs = this.userObs == '' ? this.trade.obs : this.userObs;
-    this.isComplete = this.trade.status == 'complete' ? true : false;
+  async editInfos2(){
+    const alert = await this.alertController.create({
+      header: 'Edit Infos',
+      inputs: [
+        {
+          name: 'localization',
+          type: 'text',
+          label: 'Localization',
+          placeholder: "Location",
+          value: this.userLocalization,
+        },
+        {
+          name: 'obs',
+          type: 'textarea',
+          label: 'Observation',
+          placeholder: "Observations",
+          value: this.trade.obs,
+        }    
+      ],
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {
+            this.alertController.dismiss();
+          }
+        },
+        {
+          text: 'OK',
+          handler: (event$) => {
+            this.alertController.dismiss();
+            this.userPostalCode = event$.postalCode;
+            this.userObs = event$.obs;
+            this.userLocalization = event$.localization;
+            this.updateTrade();
+          }
+        },
+      ]
+    });
 
-    console.log(this.trade);
+    await alert.present();
+  }
+
+  async editInfos3(){
+    const alert = await this.alertController.create({
+      header: 'Edit Infos',
+      inputs: [
+        {
+          name: 'type1',
+          type: 'radio',
+          label: 'Postal',
+          value: '1',
+          handler: (event$) => {
+            this.userIdTradeType = event$.value;
+            this.userTradeType = 'postal';
+          }
+        },
+        {
+          name: 'type2',
+          type: 'radio',
+          label: 'Presencial',
+          value: '2',
+          handler: (event$) => {
+            this.userIdTradeType = event$.value;
+            this.userTradeType = 'presencial';
+          }
+        }       
+      ],
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {
+            this.alertController.dismiss();
+          }
+        },
+        {
+          text: 'OK',
+          handler: () => {
+            this.alertController.dismiss();
+            this.updateTrade();
+          }
+        },
+      ]
+    });
+
+    await alert.present();
   }
 
   private async updateTrade(){
@@ -197,7 +267,7 @@ export class TradeFormPage implements OnInit {
       message: 'Trade updated!',
       buttons: [
         {
-          text: 'Cancel',
+          text: 'OK',
           role: 'cancel',
           cssClass: 'secondary',
           handler: () => {
@@ -206,12 +276,39 @@ export class TradeFormPage implements OnInit {
         }
       ]
     });
-    this.updateStatus();
+
+    if(this.trade.id_seller == this.firebaseService.currentUser.uid){
+      this.trade.seller_status = this.userStatus == '' ? this.trade.seller_status : this.userStatus;
+      this.trade.seller_id_status = this.useridStatus == '' ? this.trade.seller_id_status : this.useridStatus;
+      this.trade.security_postal_code_seller = this.userPostalCode == '' ? this.trade.security_postal_code_seller : this.userPostalCode;
+    } else {
+      this.trade.buyer_status = this.userStatus == '' ? this.trade.buyer_status : this.userStatus;
+      this.trade.buyer_id_status = this.useridStatus == '' ? this.trade.buyer_id_status : this.useridStatus;
+      this.trade.security_postal_code_buyer = this.userPostalCode == '' ? this.trade.security_postal_code_buyer : this.userPostalCode;
+    }
+    if(this.trade.security_postal_code_buyer == undefined){
+      this.trade.security_postal_code_buyer = '';
+    }
+    if(this.trade.security_postal_code_seller == undefined){
+      this.trade.security_postal_code_seller = '';
+    }
+    if(this.trade.buyer_status == this.trade.seller_status){
+      this.trade.status = this.userStatus;
+    }
+    this.trade.obs = this.userObs == '' ? this.trade.obs : this.userObs;
+    this.trade.trades_type = this.userTradeType == '' ? this.trade.trades_type : this.userTradeType;
+    this.trade.id_trades_type = this.userIdTradeType == '' ? this.trade.id_trades_type : this.userIdTradeType;
+    this.trade.localization = this.userLocalization == '' ? this.trade.localization : this.userLocalization;
+    this.isComplete = this.trade.status == 'complete' ? true : false;
+
+    console.log(this.trade);
+
     this.firebaseService.updateTrade(this.trade).then(
       (response)=>{ 
         loading.dismiss(); 
         alert.present();
       }
     );
+    
   }
 }

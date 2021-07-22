@@ -20,7 +20,7 @@ export class HavelistFormPage implements OnInit {
     language: new FormControl('', [Validators.required, ]),
   });
   cards: any[] = [];
-  card: any = { id_card: '', name: '', setName: '', quality: '', language: '', type_list: '', id_user: '', city: '', state: '', country: '', longitude: '', latitude: '', hash: ''};
+  card: any = { id_card: '', name: '', collection: '', quality: '', language: '', type_list: '', id_user: '', username: '', city: '', state: '', country: '', longitude: '', latitude: '', hash: ''};
   isList: boolean = false;
   showFormAdd: boolean = false;
   enableButton: boolean = false;
@@ -68,7 +68,7 @@ export class HavelistFormPage implements OnInit {
 
     this.card.id_card = card.multiverseid;
     this.card.name = card.name;
-    this.card.setName = card.setName;
+    this.card.collection = card.setName;
   }
 
   onEnableButton(){
@@ -88,6 +88,7 @@ export class HavelistFormPage implements OnInit {
     this.card.language = this.cardForm.get('language').value;
     this.card.type_list = '2';
     this.card.id_user = this.firebaseService.currentUser.uid;
+    this.card.username = this.firebaseService.currentUser.displayName;
     this.card.city = this.firebaseService.currentUser.city;
     this.card.state = this.firebaseService.currentUser.state;
     this.card.country = this.firebaseService.currentUser.country;

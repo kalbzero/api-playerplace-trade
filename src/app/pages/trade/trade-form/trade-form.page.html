@@ -11,7 +11,9 @@
 
 <ion-content>
   <ion-button color="primary" [disabled]="isComplete == true ? true : false" (click)="editStatus()">Edit Status</ion-button>
-  <ion-button color="primary" [disabled]="isComplete == true ? true : false" (click)="editInfos()">Edit Infos</ion-button>
+  <ion-button color="primary" [disabled]="isComplete == true ? true : false" (click)="editInfos3()">Edit Type</ion-button>
+  <ion-button color="primary" [disabled]="isComplete == true ? true : false" (click)="editInfos()" *ngIf="trade.id_trades_type == 1">Edit Infos</ion-button>
+  <ion-button color="primary" [disabled]="isComplete == true ? true : false" (click)="editInfos2()" *ngIf="trade.id_trades_type == 2">Edit Infos</ion-button>
   <ion-list>
     <ion-item>
       <ion-label>Card Name: </ion-label>
@@ -54,8 +56,8 @@
     </ion-item>
 
     <ion-item *ngIf="trade.id_trades_type == 2">
-      <ion-label>Location </ion-label>
-      <ion-label>{{trade.location}}</ion-label>
+      <ion-label>Localization </ion-label>
+      <ion-label>{{trade.localization}}</ion-label>
     </ion-item>
 
     <ion-item>

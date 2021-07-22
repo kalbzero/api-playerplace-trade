@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { LoadingController } from '@ionic/angular';
+import { AlertController, LoadingController } from '@ionic/angular';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { Router } from '@angular/router';
 
@@ -17,6 +17,7 @@ export class SearchPage implements OnInit {
     private loadingController: LoadingController,
     private firebaseService: FirebaseService, 
     private router: Router,
+    private alertController: AlertController,
     ) { 
     
   }
@@ -63,8 +64,9 @@ export class SearchPage implements OnInit {
                     cardsCountry.forEach( (card: any) => {
                       this.cards.push({
                         id_card: card.id_card,
+                        uid: card.uid,
                         name: card.name,
-                        setName: card.setName,
+                        collection: card.collection,
                         quality: card.quality,
                         language: card.language,
                         type_list: card.type_list,
@@ -84,8 +86,9 @@ export class SearchPage implements OnInit {
                 cardsState.forEach( (card: any) => {
                   this.cards.push({
                     id_card: card.id_card,
+                    uid: card.uid,
                     name: card.name,
-                    setName: card.setName,
+                    collection: card.collection,
                     quality: card.quality,
                     language: card.language,
                     type_list: card.type_list,
@@ -106,8 +109,9 @@ export class SearchPage implements OnInit {
           cardsCity.forEach( (card: any) => {
             this.cards.push({
               id_card: card.id_card,
+              uid: card.uid,
               name: card.name,
-              setName: card.setName,
+              collection: card.collection,
               quality: card.quality,
               language: card.language,
               type_list: card.type_list,
@@ -128,7 +132,24 @@ export class SearchPage implements OnInit {
     });
   }
 
-  createTrade(trade: any){
-    console.log(trade);
+  async createTrade(card: any){
+    if(card.id_user == this.firebaseService.currentUser.uid){
+      const alert = await this.alertController.create({
+        header: 'Alert',
+        message: "You can't create a trade with yourself!",
+        buttons: [
+          {
+            text: 'OK',
+            handler: () => {
+              alert.dismiss();
+            }
+          },
+        ]
+      });
+      await alert.present();
+    } else {
+      this.router.navigateByUrl('search/search-form/'+card.uid);
+    }
+    
   }
 }

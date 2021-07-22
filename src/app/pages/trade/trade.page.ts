@@ -41,12 +41,12 @@ export class TradePage implements OnInit {
       next: (trades: any) => {
         trades.forEach( trade => {
           const otherUser = trade.seller_name === this.firebaseService.currentUser.displayName ? trade.buyer_name : trade.seller_name;
-          console.log(otherUser, trade.buyer_name , trade.seller_name, trade);
+          
            this.myTrades.push({
-             id: trade.uid,
+             uid: trade.uid,
              cardName: trade.card_name,
              otherUser: otherUser,
-             status:trade.id_trade_status
+             status:trade.status
            })
          })
          
@@ -59,14 +59,13 @@ export class TradePage implements OnInit {
           this.myTrades.push({
             uid: trade.uid,
             cardName: trade.card_name,
-            otherUser,
+            otherUser: otherUser,
             status: trade.status,
           })
         })
       }
     });
     this.myTradesBK = this.myTrades;
-    console.log(this.myTradesBK);
   }
 
   openTrade(uid: string){

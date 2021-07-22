@@ -12,7 +12,7 @@ export interface Card {
     subtypes: string[],
     rarity: string,
     set: string,
-    setName: string,
+    setName: string, // collection
     text: string,
     artist: string,
     number: string,

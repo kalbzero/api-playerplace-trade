@@ -7,7 +7,12 @@ const routes: Routes = [
   {
     path: '',
     component: SearchPage
+  },
+  {
+    path: 'search-form/:id',
+    loadChildren: () => import('./search-form/search-form.module').then( m => m.SearchFormPageModule)
   }
+
 ];
 
 @NgModule({

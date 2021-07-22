@@ -18,7 +18,7 @@
       <ion-label class="text-bold">Location</ion-label>
     </ion-item>
     <ion-item *ngFor="let card of cards">
-      <ion-label style="max-width: 55% !important; color:cornflowerblue" (click)="createTrade(trade)">{{card.name}}</ion-label>
+      <ion-label style="max-width: 55% !important; color:cornflowerblue" (click)="createTrade(card)">{{card.name}}</ion-label>
       <ion-label style="max-width: 16% !important;">{{card.quality}}</ion-label>
       <ion-label>{{card.location}}</ion-label>
     </ion-item>

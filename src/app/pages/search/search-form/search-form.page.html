@@ -1,0 +1,51 @@
+<ion-header >
+  <ion-toolbar color="dark">
+    <ion-buttons slot="start">
+      <ion-menu-button autoHide="false"></ion-menu-button>
+    </ion-buttons>
+    <ion-title >
+      Search - Create Trade
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="tradeForm">
+    <ion-item>
+      <ion-label>Card Name: </ion-label>
+      <ion-input disabled="true" [value]="card.name"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Collection: </ion-label>
+      <ion-input disabled="true" [value]="card.collection"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Language: </ion-label>
+      <ion-input disabled="true" [value]="card.language"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Quality: </ion-label>
+      <ion-input disabled="true" [value]="card.quality"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Other User Name: </ion-label>
+      <ion-input disabled="true" [value]="card.username"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Type Trade: </ion-label>
+      <ion-select formControlName="id_trades_type" (ionChange)="onEnableButton()" interface="action-sheet">
+        <ion-select-option value="1">Postal</ion-select-option>
+        <ion-select-option value="2">Presencial</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-button (click)="createTrade()" [disabled]="enableButton == false ? true : false" class="ion-margin-top" expand="full" shape="round">
+      Create Trade
+    </ion-button>
+  </form>
+</ion-content>
