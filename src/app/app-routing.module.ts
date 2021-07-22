@@ -41,6 +41,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/perfil/perfil.module').then( m => m.PerfilPageModule)
   },
   {
+    path: 'perfil/:id',
+    loadChildren: () => import('./pages/perfil/perfil.module').then( m => m.PerfilPageModule)
+  },
+  {
     path: 'trade',
     loadChildren: () => import('./pages/trade/trade.module').then( m => m.TradePageModule)
   },

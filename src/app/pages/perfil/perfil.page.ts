@@ -133,7 +133,6 @@ export class PerfilPage implements OnInit {
   }
 
   private updateGraphs(){
-    console.log(this.countComp, this.countProg, this.countCanc);
     this.pieChartData = [this.countComp, this.countProg, this.countCanc];
     this.pieChartLabels = [['Completed:' +this.countComp], ['In Progress: '+this.countProg], 'Canceled: '+this.countCanc];
     monkeyPatchChartJsTooltip();
@@ -145,13 +144,17 @@ export class PerfilPage implements OnInit {
       next: (user)=>{
         this.loggedUser = user;
         //criar nome da sala
-        console.log(this.loggedUser.uid, ">", this.anotherUser.uid, this.loggedUser.uid > this.anotherUser.uid);
+        
         if(this.loggedUser.uid > this.anotherUser.uid){
+          console.log(this.loggedUser.uid, ">", this.anotherUser.uid, this.loggedUser.uid > this.anotherUser.uid);
           console.log("logged is bigger");
           this.chatRoomName = this.loggedUser.uid + this.anotherUser.uid;
-        } else {
+        } else if(this.loggedUser.uid < this.anotherUser.uid) {
+          console.log(this.loggedUser.uid, "<", this.anotherUser.uid, this.loggedUser.uid > this.anotherUser.uid);
           console.log("another is bigger");
           this.chatRoomName = this.anotherUser.uid + this.loggedUser.uid;
+        } else {
+          console.log('Vixi...');
         }
         // route to chat room 
       }

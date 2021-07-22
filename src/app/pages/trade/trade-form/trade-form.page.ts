@@ -259,6 +259,10 @@ export class TradeFormPage implements OnInit {
     await alert.present();
   }
 
+  openPerfil(uid: string){
+    this.router.navigateByUrl('perfil/'+uid);
+  }
+
   private async updateTrade(){
     const loading = await this.loadingController.create();
     await loading.present();

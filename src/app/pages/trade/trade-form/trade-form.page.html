@@ -32,12 +32,12 @@
 
     <ion-item>
       <ion-label>Buyer Name: </ion-label>
-      <ion-label>{{trade.buyer_name}}</ion-label>
+      <ion-label style="color:cornflowerblue" (click)="openPerfil(trade.id_buyer)">{{trade.buyer_name}}</ion-label>
     </ion-item>
 
     <ion-item>
       <ion-label>Seller Name: </ion-label>
-      <ion-label>{{trade.seller_name}}</ion-label>
+      <ion-label style="color:cornflowerblue" (click)="openPerfil(trade.id_seller)">{{trade.seller_name}}</ion-label>
     </ion-item>
 
     <ion-item>
