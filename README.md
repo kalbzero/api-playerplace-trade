@@ -6,3 +6,5 @@
 
 ## Firebase Config
 - In "Cloud Firestone", edit the rule in line 5 to `if true`
+
+## Happy coding
